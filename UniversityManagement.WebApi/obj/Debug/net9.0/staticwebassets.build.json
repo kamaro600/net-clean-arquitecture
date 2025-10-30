@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "dpwfIyFyJUIOlKQDxOC1HF9il7/j6ga2pG02IiJeNmc=",
+  "Source": "UniversityManagement.WebApi",
+  "BasePath": "_content/UniversityManagement.WebApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

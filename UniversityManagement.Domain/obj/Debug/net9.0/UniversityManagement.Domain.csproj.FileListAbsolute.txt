@@ -1,0 +1,11 @@
+D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagement.Domain\bin\Debug\net9.0\UniversityManagement.Domain.deps.json
+D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagement.Domain\bin\Debug\net9.0\UniversityManagement.Domain.dll
+D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagement.Domain\bin\Debug\net9.0\UniversityManagement.Domain.pdb
+D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagement.Domain\obj\Debug\net9.0\UniversityManagement.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagement.Domain\obj\Debug\net9.0\UniversityManagement.Domain.AssemblyInfoInputs.cache
+D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagement.Domain\obj\Debug\net9.0\UniversityManagement.Domain.AssemblyInfo.cs
+D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagement.Domain\obj\Debug\net9.0\UniversityManagement.Domain.csproj.CoreCompileInputs.cache
+D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagement.Domain\obj\Debug\net9.0\UniversityManagement.Domain.dll
+D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagement.Domain\obj\Debug\net9.0\refint\UniversityManagement.Domain.dll
+D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagement.Domain\obj\Debug\net9.0\UniversityManagement.Domain.pdb
+D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagement.Domain\obj\Debug\net9.0\ref\UniversityManagement.Domain.dll

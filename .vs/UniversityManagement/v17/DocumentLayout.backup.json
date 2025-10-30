@@ -1,0 +1,261 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A3172F93-A7C9-4894-BE05-BA99CD41A70B}|UniversityManagement.Infrastructure\\UniversityManagement.Infrastructure.csproj|d:\\personal\\capacitacion\\arquitectura\\net-clean-arquitecture\\universitymanagement.infrastructure\\persistence\\repositories\\careerrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A3172F93-A7C9-4894-BE05-BA99CD41A70B}|UniversityManagement.Infrastructure\\UniversityManagement.Infrastructure.csproj|solutionrelative:universitymanagement.infrastructure\\persistence\\repositories\\careerrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A3172F93-A7C9-4894-BE05-BA99CD41A70B}|UniversityManagement.Infrastructure\\UniversityManagement.Infrastructure.csproj|d:\\personal\\capacitacion\\arquitectura\\net-clean-arquitecture\\universitymanagement.infrastructure\\data\\universitydbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A3172F93-A7C9-4894-BE05-BA99CD41A70B}|UniversityManagement.Infrastructure\\UniversityManagement.Infrastructure.csproj|solutionrelative:universitymanagement.infrastructure\\data\\universitydbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A3172F93-A7C9-4894-BE05-BA99CD41A70B}|UniversityManagement.Infrastructure\\UniversityManagement.Infrastructure.csproj|d:\\personal\\capacitacion\\arquitectura\\net-clean-arquitecture\\universitymanagement.infrastructure\\data\\configurations\\careerconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A3172F93-A7C9-4894-BE05-BA99CD41A70B}|UniversityManagement.Infrastructure\\UniversityManagement.Infrastructure.csproj|solutionrelative:universitymanagement.infrastructure\\data\\configurations\\careerconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A3172F93-A7C9-4894-BE05-BA99CD41A70B}|UniversityManagement.Infrastructure\\UniversityManagement.Infrastructure.csproj|d:\\personal\\capacitacion\\arquitectura\\net-clean-arquitecture\\universitymanagement.infrastructure\\persistence\\repositories\\professorrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A3172F93-A7C9-4894-BE05-BA99CD41A70B}|UniversityManagement.Infrastructure\\UniversityManagement.Infrastructure.csproj|solutionrelative:universitymanagement.infrastructure\\persistence\\repositories\\professorrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A3172F93-A7C9-4894-BE05-BA99CD41A70B}|UniversityManagement.Infrastructure\\UniversityManagement.Infrastructure.csproj|d:\\personal\\capacitacion\\arquitectura\\net-clean-arquitecture\\universitymanagement.infrastructure\\persistence\\repositories\\facultyrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A3172F93-A7C9-4894-BE05-BA99CD41A70B}|UniversityManagement.Infrastructure\\UniversityManagement.Infrastructure.csproj|solutionrelative:universitymanagement.infrastructure\\persistence\\repositories\\facultyrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A3172F93-A7C9-4894-BE05-BA99CD41A70B}|UniversityManagement.Infrastructure\\UniversityManagement.Infrastructure.csproj|d:\\personal\\capacitacion\\arquitectura\\net-clean-arquitecture\\universitymanagement.infrastructure\\persistence\\repositories\\studentrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A3172F93-A7C9-4894-BE05-BA99CD41A70B}|UniversityManagement.Infrastructure\\UniversityManagement.Infrastructure.csproj|solutionrelative:universitymanagement.infrastructure\\persistence\\repositories\\studentrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A3172F93-A7C9-4894-BE05-BA99CD41A70B}|UniversityManagement.Infrastructure\\UniversityManagement.Infrastructure.csproj|d:\\personal\\capacitacion\\arquitectura\\net-clean-arquitecture\\universitymanagement.infrastructure\\events\\domaineventdispatcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A3172F93-A7C9-4894-BE05-BA99CD41A70B}|UniversityManagement.Infrastructure\\UniversityManagement.Infrastructure.csproj|solutionrelative:universitymanagement.infrastructure\\events\\domaineventdispatcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6D2DA6E4-2E9E-4D0A-AD0E-0BDAA2DDCBC6}|UniversityManagement.Application\\UniversityManagement.Application.csproj|d:\\personal\\capacitacion\\arquitectura\\net-clean-arquitecture\\universitymanagement.application\\ports\\out\\ilognotificationport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6D2DA6E4-2E9E-4D0A-AD0E-0BDAA2DDCBC6}|UniversityManagement.Application\\UniversityManagement.Application.csproj|solutionrelative:universitymanagement.application\\ports\\out\\ilognotificationport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6D2DA6E4-2E9E-4D0A-AD0E-0BDAA2DDCBC6}|UniversityManagement.Application\\UniversityManagement.Application.csproj|d:\\personal\\capacitacion\\arquitectura\\net-clean-arquitecture\\universitymanagement.application\\ports\\out\\iemailnotificationport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6D2DA6E4-2E9E-4D0A-AD0E-0BDAA2DDCBC6}|UniversityManagement.Application\\UniversityManagement.Application.csproj|solutionrelative:universitymanagement.application\\ports\\out\\iemailnotificationport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6D2DA6E4-2E9E-4D0A-AD0E-0BDAA2DDCBC6}|UniversityManagement.Application\\UniversityManagement.Application.csproj|d:\\personal\\capacitacion\\arquitectura\\net-clean-arquitecture\\universitymanagement.application\\services\\studentusecase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6D2DA6E4-2E9E-4D0A-AD0E-0BDAA2DDCBC6}|UniversityManagement.Application\\UniversityManagement.Application.csproj|solutionrelative:universitymanagement.application\\services\\studentusecase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6D2DA6E4-2E9E-4D0A-AD0E-0BDAA2DDCBC6}|UniversityManagement.Application\\UniversityManagement.Application.csproj|d:\\personal\\capacitacion\\arquitectura\\net-clean-arquitecture\\universitymanagement.application\\services\\careerusecase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6D2DA6E4-2E9E-4D0A-AD0E-0BDAA2DDCBC6}|UniversityManagement.Application\\UniversityManagement.Application.csproj|solutionrelative:universitymanagement.application\\services\\careerusecase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{84CE67E8-A174-40DD-B029-AE304575E522}|UniversityManagement.WebApi\\UniversityManagement.WebApi.csproj|d:\\personal\\capacitacion\\arquitectura\\net-clean-arquitecture\\universitymanagement.webapi\\controllers\\studentscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{84CE67E8-A174-40DD-B029-AE304575E522}|UniversityManagement.WebApi\\UniversityManagement.WebApi.csproj|solutionrelative:universitymanagement.webapi\\controllers\\studentscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6D2DA6E4-2E9E-4D0A-AD0E-0BDAA2DDCBC6}|UniversityManagement.Application\\UniversityManagement.Application.csproj|d:\\personal\\capacitacion\\arquitectura\\net-clean-arquitecture\\universitymanagement.application\\services\\facultyusecase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6D2DA6E4-2E9E-4D0A-AD0E-0BDAA2DDCBC6}|UniversityManagement.Application\\UniversityManagement.Application.csproj|solutionrelative:universitymanagement.application\\services\\facultyusecase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6D2DA6E4-2E9E-4D0A-AD0E-0BDAA2DDCBC6}|UniversityManagement.Application\\UniversityManagement.Application.csproj|d:\\personal\\capacitacion\\arquitectura\\net-clean-arquitecture\\universitymanagement.application\\services\\professorusecase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6D2DA6E4-2E9E-4D0A-AD0E-0BDAA2DDCBC6}|UniversityManagement.Application\\UniversityManagement.Application.csproj|solutionrelative:universitymanagement.application\\services\\professorusecase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "StudentRepository.cs",
+              "DocumentMoniker": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Infrastructure\\Persistence\\Repositories\\StudentRepository.cs",
+              "RelativeDocumentMoniker": "UniversityManagement.Infrastructure\\Persistence\\Repositories\\StudentRepository.cs",
+              "ToolTip": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Infrastructure\\Persistence\\Repositories\\StudentRepository.cs",
+              "RelativeToolTip": "UniversityManagement.Infrastructure\\Persistence\\Repositories\\StudentRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T02:00:21.558Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ProfessorRepository.cs",
+              "DocumentMoniker": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Infrastructure\\Persistence\\Repositories\\ProfessorRepository.cs",
+              "RelativeDocumentMoniker": "UniversityManagement.Infrastructure\\Persistence\\Repositories\\ProfessorRepository.cs",
+              "ToolTip": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Infrastructure\\Persistence\\Repositories\\ProfessorRepository.cs",
+              "RelativeToolTip": "UniversityManagement.Infrastructure\\Persistence\\Repositories\\ProfessorRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T02:00:18.736Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "FacultyRepository.cs",
+              "DocumentMoniker": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Infrastructure\\Persistence\\Repositories\\FacultyRepository.cs",
+              "RelativeDocumentMoniker": "UniversityManagement.Infrastructure\\Persistence\\Repositories\\FacultyRepository.cs",
+              "ToolTip": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Infrastructure\\Persistence\\Repositories\\FacultyRepository.cs",
+              "RelativeToolTip": "UniversityManagement.Infrastructure\\Persistence\\Repositories\\FacultyRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T02:00:13.797Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CareerConfiguration.cs",
+              "DocumentMoniker": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Infrastructure\\Data\\Configurations\\CareerConfiguration.cs",
+              "RelativeDocumentMoniker": "UniversityManagement.Infrastructure\\Data\\Configurations\\CareerConfiguration.cs",
+              "ToolTip": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Infrastructure\\Data\\Configurations\\CareerConfiguration.cs",
+              "RelativeToolTip": "UniversityManagement.Infrastructure\\Data\\Configurations\\CareerConfiguration.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T01:59:13.328Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "CareerRepository.cs",
+              "DocumentMoniker": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Infrastructure\\Persistence\\Repositories\\CareerRepository.cs",
+              "RelativeDocumentMoniker": "UniversityManagement.Infrastructure\\Persistence\\Repositories\\CareerRepository.cs",
+              "ToolTip": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Infrastructure\\Persistence\\Repositories\\CareerRepository.cs",
+              "RelativeToolTip": "UniversityManagement.Infrastructure\\Persistence\\Repositories\\CareerRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T01:52:27.571Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UniversityDbContext.cs",
+              "DocumentMoniker": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Infrastructure\\Data\\UniversityDbContext.cs",
+              "RelativeDocumentMoniker": "UniversityManagement.Infrastructure\\Data\\UniversityDbContext.cs",
+              "ToolTip": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Infrastructure\\Data\\UniversityDbContext.cs",
+              "RelativeToolTip": "UniversityManagement.Infrastructure\\Data\\UniversityDbContext.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABYAAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T01:58:23.483Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "DomainEventDispatcher.cs",
+              "DocumentMoniker": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Infrastructure\\Events\\DomainEventDispatcher.cs",
+              "RelativeDocumentMoniker": "UniversityManagement.Infrastructure\\Events\\DomainEventDispatcher.cs",
+              "ToolTip": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Infrastructure\\Events\\DomainEventDispatcher.cs",
+              "RelativeToolTip": "UniversityManagement.Infrastructure\\Events\\DomainEventDispatcher.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T01:57:24.315Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ILogNotificationPort.cs",
+              "DocumentMoniker": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Application\\Ports\\Out\\ILogNotificationPort.cs",
+              "RelativeDocumentMoniker": "UniversityManagement.Application\\Ports\\Out\\ILogNotificationPort.cs",
+              "ToolTip": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Application\\Ports\\Out\\ILogNotificationPort.cs",
+              "RelativeToolTip": "UniversityManagement.Application\\Ports\\Out\\ILogNotificationPort.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T01:40:57.622Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "IEmailNotificationPort.cs",
+              "DocumentMoniker": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Application\\Ports\\Out\\IEmailNotificationPort.cs",
+              "RelativeDocumentMoniker": "UniversityManagement.Application\\Ports\\Out\\IEmailNotificationPort.cs",
+              "ToolTip": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Application\\Ports\\Out\\IEmailNotificationPort.cs",
+              "RelativeToolTip": "UniversityManagement.Application\\Ports\\Out\\IEmailNotificationPort.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T01:34:34.837Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "StudentUseCase.cs",
+              "DocumentMoniker": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Application\\Services\\StudentUseCase.cs",
+              "RelativeDocumentMoniker": "UniversityManagement.Application\\Services\\StudentUseCase.cs",
+              "ToolTip": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Application\\Services\\StudentUseCase.cs",
+              "RelativeToolTip": "UniversityManagement.Application\\Services\\StudentUseCase.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-28T04:15:14.831Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "StudentsController.cs",
+              "DocumentMoniker": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.WebApi\\Controllers\\StudentsController.cs",
+              "RelativeDocumentMoniker": "UniversityManagement.WebApi\\Controllers\\StudentsController.cs",
+              "ToolTip": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.WebApi\\Controllers\\StudentsController.cs",
+              "RelativeToolTip": "UniversityManagement.WebApi\\Controllers\\StudentsController.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-30T01:01:21.609Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "FacultyUseCase.cs",
+              "DocumentMoniker": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Application\\Services\\FacultyUseCase.cs",
+              "RelativeDocumentMoniker": "UniversityManagement.Application\\Services\\FacultyUseCase.cs",
+              "ToolTip": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Application\\Services\\FacultyUseCase.cs",
+              "RelativeToolTip": "UniversityManagement.Application\\Services\\FacultyUseCase.cs",
+              "ViewState": "AgIAAEoAAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-28T04:15:16.487Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "CareerUseCase.cs",
+              "DocumentMoniker": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Application\\Services\\CareerUseCase.cs",
+              "RelativeDocumentMoniker": "UniversityManagement.Application\\Services\\CareerUseCase.cs",
+              "ToolTip": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Application\\Services\\CareerUseCase.cs",
+              "RelativeToolTip": "UniversityManagement.Application\\Services\\CareerUseCase.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-28T04:15:17.403Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ProfessorUseCase.cs",
+              "DocumentMoniker": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Application\\Services\\ProfessorUseCase.cs",
+              "RelativeDocumentMoniker": "UniversityManagement.Application\\Services\\ProfessorUseCase.cs",
+              "ToolTip": "D:\\Personal\\CAPACITACION\\Arquitectura\\net-clean-arquitecture\\UniversityManagement.Application\\Services\\ProfessorUseCase.cs",
+              "RelativeToolTip": "UniversityManagement.Application\\Services\\ProfessorUseCase.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-28T04:15:15.726Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
