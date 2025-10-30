@@ -8,7 +8,7 @@
 
 ```bash
 # 1. Clonar y navegar al proyecto
-git clone <repository-url>
+git clone https://github.com/kamaro600/net-clean-arquitecture.git
 cd net-clean-arquitecture
 
 # 2. Configurar base de datos PostgreSQL
