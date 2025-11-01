@@ -11,7 +11,6 @@ namespace UniversityManagement.Application.Services;
 
 /// <summary>
 /// Caso de uso para gestión de facultades
-/// Orquesta las operaciones de negocio relacionadas con facultades
 /// </summary>
 public class FacultyUseCase : IFacultyUseCase
 {
@@ -33,8 +32,8 @@ public class FacultyUseCase : IFacultyUseCase
         // Crear la facultad
         var faculty = new Faculty
         {
-            Nombre = command.Name,
-            Descripcion = command.Description,
+            Name = command.Name,
+            Description = command.Description,
             Activo = true,
             FechaRegistro = DateTime.UtcNow
         };
@@ -54,7 +53,7 @@ public class FacultyUseCase : IFacultyUseCase
         }
 
         // Validar nombre único si se está actualizando
-        if (!string.IsNullOrEmpty(command.Name) && command.Name != existingFaculty.Nombre)
+        if (!string.IsNullOrEmpty(command.Name) && command.Name != existingFaculty.Name)
         {
             if (await _facultyRepository.ExistsByNameAsync(command.Name))
             {
@@ -63,8 +62,8 @@ public class FacultyUseCase : IFacultyUseCase
         }
 
         // Actualizar campos
-        existingFaculty.Nombre = command.Name ?? existingFaculty.Nombre;
-        existingFaculty.Descripcion = command.Description ?? existingFaculty.Descripcion;
+        existingFaculty.Name = command.Name ?? existingFaculty.Name;
+        existingFaculty.Description = command.Description ?? existingFaculty.Description;
         if (command.IsActive.HasValue)
             existingFaculty.Activo = command.IsActive.Value;
 
@@ -90,7 +89,7 @@ public class FacultyUseCase : IFacultyUseCase
         if (!string.IsNullOrEmpty(query.SearchTerm))
         {
             result = result
-                .Where(f => f.Nombre.Contains(query.SearchTerm, StringComparison.OrdinalIgnoreCase))
+                .Where(f => f.Name.Contains(query.SearchTerm, StringComparison.OrdinalIgnoreCase))
                 .ToList();
         }
 

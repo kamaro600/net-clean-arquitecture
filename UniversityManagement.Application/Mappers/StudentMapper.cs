@@ -7,32 +7,32 @@ namespace UniversityManagement.Application.Mappers;
 /// Mapper para convertir entidades Student a DTOs de respuesta
 /// </summary>
 public static class StudentMapper
-{  
+{
     /// <summary>
-    /// Convierte Student a StudentData para respuestas paginadas
+    /// Convierte Student a StudentResponse
     /// </summary>
     public static StudentResponse ToStudentData(this Student student)
     {
         return new StudentResponse
         {
             Id = student.EstudianteId,
-            Nombre = student.Nombre,
-            Apellido = student.Apellido,
+            FirstName = student.Nombre,
+            LastName = student.Apellido,
             Dni = student.Dni,
             Email = student.Email,
-            Telefono = student.Telefono,
-            FechaNacimiento = student.FechaNacimiento,
-            Direccion = student.Direccion,
-            Activo = student.Activo,
-            FechaRegistro = student.FechaRegistro,
-            Carreras = student.StudentCareers?.Select(sc => new StudentCareerResponse
+            Phone = student.Telefono,
+            BirthDate = student.FechaNacimiento,
+            Address = student.Direccion,
+            IsActive = student.Activo,
+            RegisterDate = student.FechaRegistro,
+            Careers = student.StudentCareers?.Select(sc => new StudentCareerResponse
             {
-                CarreraId = sc.Career?.CarreraId ?? 0,
-                NombreCarrera = sc.Career?.Nombre ?? string.Empty,
-                DescripcionCarrera = sc.Career?.Descripcion,
-                FacultadNombre = sc.Career?.Faculty?.Nombre,
-                FechaInscripcion = sc.FechaInscripcion,
-                Activo = sc.Activo
+                CareerId = sc.Career?.CareerId ?? 0,
+                CareerName = sc.Career?.Name ?? string.Empty,
+                CareerDescription = sc.Career?.Description,
+                FacultyName = sc.Career?.Faculty?.Name,
+                EnrollmentDate = sc.EnrollmentDate,
+                IsActive = sc.IsActive
             }).ToList() ?? new List<StudentCareerResponse>()
         };
     }

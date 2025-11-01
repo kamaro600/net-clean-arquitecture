@@ -14,7 +14,6 @@ namespace UniversityManagement.Application.Services;
 
 /// <summary>
 /// Caso de uso para gestión de profesores
-/// Orquesta las operaciones de negocio relacionadas con profesores
 /// </summary>
 public class ProfessorUseCase : IProfessorUseCase
 {
@@ -36,12 +35,12 @@ public class ProfessorUseCase : IProfessorUseCase
         // Crear el profesor
         var professor = new Professor
         {
-            Nombre = command.FirstName,
-            Apellido = command.LastName,
+            FirstName = command.FirstName,
+            LastName = command.LastName,
             Dni = command.Dni,
             Email = command.Email,
-            Telefono = command.Phone,
-            Especialidad = command.Specialty,
+            Phone = command.Phone,
+            Specialty = command.Specialty,
             Activo = true,
             FechaRegistro = DateTime.UtcNow
         };
@@ -78,12 +77,12 @@ public class ProfessorUseCase : IProfessorUseCase
         }
 
         // Actualizar campos
-        existingProfessor.Nombre = command.FirstName ?? existingProfessor.Nombre;
-        existingProfessor.Apellido = command.LastName ?? existingProfessor.Apellido;
+        existingProfessor.FirstName = command.FirstName ?? existingProfessor.FirstName;
+        existingProfessor.LastName = command.LastName ?? existingProfessor.LastName;
         existingProfessor.Dni = command.Dni ?? existingProfessor.Dni;
         existingProfessor.Email = command.Email ?? existingProfessor.Email;
-        existingProfessor.Telefono = command.Phone ?? existingProfessor.Telefono;
-        existingProfessor.Especialidad = command.Specialty ?? existingProfessor.Especialidad;
+        existingProfessor.Phone = command.Phone ?? existingProfessor.Phone;
+        existingProfessor.Specialty = command.Specialty ?? existingProfessor.Specialty;
         if (command.IsActive.HasValue)
             existingProfessor.Activo = command.IsActive.Value;
 
@@ -108,8 +107,8 @@ public class ProfessorUseCase : IProfessorUseCase
         if (!string.IsNullOrEmpty(query.SearchTerm))
         {
             result = result.Where(p =>
-                     (!string.IsNullOrEmpty(p.Nombre) && p.Nombre.Contains(query.SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
-                     (!string.IsNullOrEmpty(p.Apellido) && p.Apellido.Contains(query.SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                     (!string.IsNullOrEmpty(p.FirstName) && p.FirstName.Contains(query.SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                     (!string.IsNullOrEmpty(p.LastName) && p.LastName.Contains(query.SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
                      (!string.IsNullOrEmpty(p.Dni) && p.Dni.Contains(query.SearchTerm, StringComparison.OrdinalIgnoreCase)) ||
                      (!string.IsNullOrEmpty(p.Email) && p.Email.Contains(query.SearchTerm, StringComparison.OrdinalIgnoreCase))
                 )

@@ -15,18 +15,18 @@ public static class CareerMapper
     {
         return new CareerResponse
         {
-            Id = career.CarreraId,
-            Nombre = career.Nombre,
-            Descripcion = career.Descripcion,
-            DuracionSemestres = career.DuracionSemestres,
-            TituloOtorgado = career.TituloOtorgado,
-            Activo = career.Activo,
-            FechaRegistro = career.FechaRegistro,
-            FacultadId = career.FacultadId,
-            FacultadNombre = career.Faculty?.Nombre,
-            FacultadDescripcion = career.Faculty?.Descripcion,
-            TotalEstudiantes = career.StudentCareers?.Count(sc => sc.Activo) ?? 0,
-            TotalProfesores = career.ProfessorCareers?.Count(pc => pc.Activo) ?? 0
+            Id = career.CareerId,
+            Name = career.Name,
+            Description = career.Description,
+            SemesterDuration = career.SemesterDuration,
+            AwardedTitle = career.AwardedTitle,
+            IsActive = career.Activo,
+            RegistrationDate = career.FechaRegistro,
+            FacultyId = career.FacultyId,
+            FacultyName = career.Faculty?.Name,
+            FacultyDescription = career.Faculty?.Description,
+            TotalStudents = career.StudentCareers?.Count(sc => sc.IsActive) ?? 0,
+            TotalProfessors = career.ProfessorCareers?.Count(pc => pc.IsActive) ?? 0
         };
     }
 

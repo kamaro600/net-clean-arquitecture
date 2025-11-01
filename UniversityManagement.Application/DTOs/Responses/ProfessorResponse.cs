@@ -6,21 +6,21 @@ namespace UniversityManagement.Application.DTOs.Responses;
 public class ProfessorResponse
 {
     public int Id { get; set; }
-    public string Nombre { get; set; } = string.Empty;
-    public string Apellido { get; set; } = string.Empty;
-    public string NombreCompleto => $"{Nombre} {Apellido}";
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string FullName => $"{FirstName} {LastName}";
     public string Dni { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
-    public string? Telefono { get; set; }
-    public string? Especialidad { get; set; }
-    public string? TituloAcademico { get; set; }
-    public bool Activo { get; set; }
-    public DateTime FechaRegistro { get; set; }
+    public string? Phone { get; set; }
+    public string? Specialty { get; set; }
+    public string? AcademicDegree { get; set; }
+    public bool IsActive { get; set; }
+    public DateTime RegisterDate { get; set; }
 
     // Información de las carreras que enseña
-    public List<ProfessorCareerResponse> Carreras { get; set; } = new();
+    public List<ProfessorCareerResponse> Careers { get; set; } = new();
 
     // Estadísticas
-    public int TotalCarreras { get; set; }
-    public int AniosExperiencia => DateTime.Now.Year - FechaRegistro.Year;
+    public int TotalCareers { get; set; }
+    public int YearsOfExperience => DateTime.Now.Year - RegisterDate.Year;
 }

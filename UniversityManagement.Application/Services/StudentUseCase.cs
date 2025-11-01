@@ -13,7 +13,6 @@ namespace UniversityManagement.Application.Services;
 
 /// <summary>
 /// Implementación de casos de uso de estudiantes
-/// Trabaja directamente con modelos de dominio, sin DTOs intermedios
 /// </summary>
 public class StudentUseCase : IStudentUseCase
 {
@@ -38,13 +37,13 @@ public class StudentUseCase : IStudentUseCase
         // Crear entidad directamente desde command
         var student = new Student
         {
-            Nombre = command.Nombre,
-            Apellido = command.Apellido,
+            Nombre = command.FirstName,
+            Apellido = command.LastName,
             Dni = command.Dni,
             Email = command.Email,
-            Telefono = command.Telefono,
-            FechaNacimiento = command.FechaNacimiento,
-            Direccion = command.Direccion
+            Telefono = command.Phone,
+            FechaNacimiento = command.Birthdate,
+            Direccion = command.Address
         };
 
         // Validar datos usando Value Objects
@@ -65,23 +64,23 @@ public class StudentUseCase : IStudentUseCase
     public async Task<StudentResponse> UpdateStudentAsync(UpdateStudentCommand command)
     {
 
-        var existingStudent = await _studentRepository.GetByIdAsync(command.EstudianteId);
+        var existingStudent = await _studentRepository.GetByIdAsync(command.Id);
         if (existingStudent == null)
-            throw new StudentNotFoundException(command.EstudianteId);            
+            throw new StudentNotFoundException(command.Id);            
 
         // Validar que el DNI no esté en uso por otro estudiante
         var studentWithDni = await _studentRepository.GetByDniAsync(command.Dni);
-        if (studentWithDni != null && studentWithDni.EstudianteId != command.EstudianteId)
+        if (studentWithDni != null && studentWithDni.EstudianteId != command.Id)
             throw new DuplicateStudentException("Dni", command.Dni);
 
         // Actualizar propiedades
-        existingStudent.Nombre = command.Nombre;
-        existingStudent.Apellido = command.Apellido;
+        existingStudent.Nombre = command.FirstName;
+        existingStudent.Apellido = command.LastName;
         existingStudent.Email = command.Email;
-        existingStudent.Telefono = command.Telefono;
-        existingStudent.FechaNacimiento = command.FechaNacimiento;
-        existingStudent.Direccion = command.Direccion;
-        existingStudent.Activo = command.Activo;
+        existingStudent.Telefono = command.Phone;
+        existingStudent.FechaNacimiento = command.BirthDate;
+        existingStudent.Direccion = command.Address;
+        existingStudent.Activo = command.IsActive;
 
         var updatedStudent = await _studentRepository.UpdateAsync(existingStudent);
 
@@ -92,11 +91,11 @@ public class StudentUseCase : IStudentUseCase
     public async Task<DeletionResponse> DeleteStudentAsync(DeleteStudentCommand command)
     {
 
-        var student = await _studentRepository.GetByIdAsync(command.EstudianteId);
+        var student = await _studentRepository.GetByIdAsync(command.Id);
         if (student == null)
-            return DeletionResponse.NotFound($"No se encontró el estudiante con ID: {command.EstudianteId}");
+            return DeletionResponse.NotFound($"No se encontró el estudiante con ID: {command.Id}");
 
-        var result = await _studentRepository.DeleteAsync(command.EstudianteId);
+        var result = await _studentRepository.DeleteAsync(command.Id);
 
         if (result)
         {
@@ -105,7 +104,7 @@ public class StudentUseCase : IStudentUseCase
                 $"{student.Nombre} {student.Apellido}",
                 new List<string> { "Eliminación de cuenta" });
 
-            return DeletionResponse.Success($"Estudiante con ID {command.EstudianteId} eliminado exitosamente");
+            return DeletionResponse.Success($"Estudiante con ID {command.Id} eliminado exitosamente");
         }
 
         return DeletionResponse.Failure("Error al eliminar estudiante");
@@ -115,9 +114,9 @@ public class StudentUseCase : IStudentUseCase
     public async Task<StudentResponse> GetStudentByIdAsync(GetStudentByIdQuery query)
     {
 
-        var student = await _studentRepository.GetByIdAsync(query.EstudianteId);
+        var student = await _studentRepository.GetByIdAsync(query.StudentId);
         if (student == null)
-            throw new StudentNotFoundException(query.EstudianteId);        
+            throw new StudentNotFoundException(query.StudentId);        
 
         return student.ToStudentData();
 
@@ -154,7 +153,7 @@ public class StudentUseCase : IStudentUseCase
 
     public async Task<List<StudentResponse>> GetStudentsByCareerAsync(GetStudentsByCareerQuery query)
     {
-        var result = await _studentRepository.GetStudentsByCareerId(query.CarreraId);
+        var result = await _studentRepository.GetStudentsByCareerId(query.CareerId);
 
         return result.ToStudentDataList();
 

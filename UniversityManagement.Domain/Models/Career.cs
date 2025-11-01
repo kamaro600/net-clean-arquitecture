@@ -4,12 +4,12 @@ namespace UniversityManagement.Domain.Models;
 
 public class Career : BaseEntity
 {
-    public int CarreraId { get; set; }
-    public int FacultadId { get; set; }
-    public string Nombre { get; set; } = string.Empty;
-    public string? Descripcion { get; set; }
-    public int DuracionSemestres { get; set; }
-    public string? TituloOtorgado { get; set; }
+    public int CareerId { get; set; }
+    public int FacultyId { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string? Description { get; set; }
+    public int SemesterDuration { get; set; }
+    public string? AwardedTitle { get; set; }
 
     // Propiedades de navegación
     public virtual Faculty Faculty { get; set; } = null!;

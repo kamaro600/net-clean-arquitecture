@@ -8,11 +8,11 @@ namespace UniversityManagement.Application.DTOs.Queries
 {
     public class GetStudentsByCareerQuery
     {
-        public int CarreraId { get; set; }
+        public int CareerId { get; set; }
 
-        public GetStudentsByCareerQuery(int carreraId)
+        public GetStudentsByCareerQuery(int careerId)
         {
-            CarreraId = carreraId;
+            CareerId = careerId;
         }
     }
 }

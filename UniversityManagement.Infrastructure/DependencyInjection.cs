@@ -11,10 +11,6 @@ using UniversityManagement.Application.Ports.Out;
 
 namespace UniversityManagement.Infrastructure;
 
-/// <summary>
-/// Extension methods para registrar servicios de Infrastructure
-/// Siguiendo Clean Architecture - Infrastructure NO debe referenciar Application
-/// </summary>
 public static class DependencyInjection
 {
     /// <summary>

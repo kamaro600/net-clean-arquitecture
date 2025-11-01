@@ -10,29 +10,29 @@ public class CareerConfiguration : IEntityTypeConfiguration<Career>
     {
         builder.ToTable("carrera");
 
-        builder.HasKey(e => e.CarreraId);
-        builder.Property(e => e.CarreraId)
+        builder.HasKey(e => e.CareerId);
+        builder.Property(e => e.CareerId)
             .HasColumnName("carrera_id")
             .ValueGeneratedOnAdd();
 
-        builder.Property(e => e.FacultadId)
+        builder.Property(e => e.FacultyId)
             .HasColumnName("facultad_id")
             .IsRequired();
 
-        builder.Property(e => e.Nombre)
+        builder.Property(e => e.Name)
             .HasColumnName("nombre")
             .HasMaxLength(100)
             .IsRequired();
 
-        builder.Property(e => e.Descripcion)
+        builder.Property(e => e.Description)
             .HasColumnName("descripcion")
             .HasColumnType("text");
 
-        builder.Property(e => e.DuracionSemestres)
+        builder.Property(e => e.SemesterDuration)
             .HasColumnName("duracion_semestres")
             .IsRequired();
 
-        builder.Property(e => e.TituloOtorgado)
+        builder.Property(e => e.AwardedTitle)
             .HasColumnName("titulo_otorgado")
             .HasMaxLength(100);
 
@@ -48,12 +48,12 @@ public class CareerConfiguration : IEntityTypeConfiguration<Career>
         // Relación con Faculty
         builder.HasOne(e => e.Faculty)
             .WithMany(f => f.Careers)
-            .HasForeignKey(e => e.FacultadId)
+            .HasForeignKey(e => e.FacultyId)
             .HasConstraintName("fk_facultad")
             .OnDelete(DeleteBehavior.Restrict);
 
         // Índice único para el nombre
-        builder.HasIndex(e => e.Nombre)
+        builder.HasIndex(e => e.Name)
             .IsUnique()
             .HasDatabaseName("uk_carrera_nombre");
     }

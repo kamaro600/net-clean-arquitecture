@@ -7,7 +7,6 @@ namespace UniversityManagement.Infrastructure.Persistence.Repositories;
 
 /// <summary>
 /// Implementación del repositorio de carreras
-/// Implementa tanto la interfaz de dominio como el puerto de aplicación
 /// </summary>
 public class CareerRepository : ICareerRepository
 {
@@ -29,13 +28,13 @@ public class CareerRepository : ICareerRepository
     {
         return await _context.Careers
             .Include(c => c.Faculty)
-            .FirstOrDefaultAsync(c => c.CarreraId == id);
+            .FirstOrDefaultAsync(c => c.CareerId == id);
     }
 
     public async Task<Career?> GetByNameAsync(string name)
     {
         return await _context.Careers
-            .FirstOrDefaultAsync(c => c.Nombre == name);
+            .FirstOrDefaultAsync(c => c.Name == name);
     }
 
     public async Task<Career> UpdateAsync(Career career)
@@ -65,14 +64,14 @@ public class CareerRepository : ICareerRepository
 
         if (!string.IsNullOrEmpty(searchTerm))
         {
-            query = query.Where(c => c.Nombre.Contains(searchTerm) || 
-                                   c.Descripcion!.Contains(searchTerm));
+            query = query.Where(c => c.Name.Contains(searchTerm) || 
+                                   c.Description!.Contains(searchTerm));
         }
 
         var totalCount = await query.CountAsync();
         
         var careers = await query
-            .OrderBy(c => c.Nombre)
+            .OrderBy(c => c.Name)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
@@ -84,12 +83,12 @@ public class CareerRepository : ICareerRepository
     {
         var query = _context.Careers
             .Include(c => c.Faculty)
-            .Where(c => c.FacultadId == facultyId && c.Activo);
+            .Where(c => c.FacultyId == facultyId && c.Activo);
 
         var totalCount = await query.CountAsync();
         
         var careers = await query
-            .OrderBy(c => c.Nombre)
+            .OrderBy(c => c.Name)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
@@ -99,12 +98,12 @@ public class CareerRepository : ICareerRepository
 
     public async Task<bool> ExistsByNameAsync(string name)
     {
-        return await _context.Careers.AnyAsync(c => c.Nombre == name && c.Activo);
+        return await _context.Careers.AnyAsync(c => c.Name == name && c.Activo);
     }
 
     public async Task<bool> ExistsAsync(int id)
     {
-        return await _context.Careers.AnyAsync(c => c.CarreraId == id && c.Activo);
+        return await _context.Careers.AnyAsync(c => c.CareerId == id && c.Activo);
     }
 
     // Métodos de la interfaz de dominio
@@ -113,7 +112,7 @@ public class CareerRepository : ICareerRepository
         return await _context.Careers
             .Include(c => c.Faculty)
             .Where(c => c.Activo)
-            .OrderBy(c => c.Nombre)
+            .OrderBy(c => c.Name)
             .ToListAsync();
     }
 
@@ -121,8 +120,8 @@ public class CareerRepository : ICareerRepository
     {
         return await _context.Careers
             .Include(c => c.Faculty)
-            .Where(c => c.FacultadId == facultyId && c.Activo)
-            .OrderBy(c => c.Nombre)
+            .Where(c => c.FacultyId == facultyId && c.Activo)
+            .OrderBy(c => c.Name)
             .ToListAsync();
     }
 }

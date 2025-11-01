@@ -5,10 +5,6 @@ using UniversityManagement.Domain.Models;
 
 namespace UniversityManagement.Application.Ports.In;
 
-/// <summary>
-/// Puerto de entrada para casos de uso de estudiantes
-/// Representa las operaciones que la aplicación puede realizar (Use Cases)
-/// </summary>
 public interface IStudentUseCase
 {
     // Commands (Escritura)

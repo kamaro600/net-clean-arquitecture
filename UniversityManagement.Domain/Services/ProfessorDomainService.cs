@@ -19,13 +19,13 @@ public class ProfessorDomainService : IProfessorDomainService
     public async Task ValidateProfessorUniquenessAsync(string dni, string email, int? excludeProfessorId = null)
     {
         var existingProfessorByDni = await _professorRepository.GetByDniAsync(dni);
-        if (existingProfessorByDni != null && existingProfessorByDni.ProfesorId != excludeProfessorId)
+        if (existingProfessorByDni != null && existingProfessorByDni.ProfessorId != excludeProfessorId)
         {
             throw new DuplicateProfessorException("DNI", dni);
         }
 
         var existingProfessorByEmail = await _professorRepository.GetByEmailAsync(email);
-        if (existingProfessorByEmail != null && existingProfessorByEmail.ProfesorId != excludeProfessorId)
+        if (existingProfessorByEmail != null && existingProfessorByEmail.ProfessorId != excludeProfessorId)
         {
             throw new DuplicateProfessorException("Email", email);
         }
@@ -42,6 +42,6 @@ public class ProfessorDomainService : IProfessorDomainService
             return false;
 
         // Verificar si ya está asignado a esa carrera
-        return !professor.ProfessorCareers.Any(pc => pc.CarreraId == careerId && pc.Activo);
+        return !professor.ProfessorCareers.Any(pc => pc.CareerId == careerId && pc.IsActive);
     }
 }

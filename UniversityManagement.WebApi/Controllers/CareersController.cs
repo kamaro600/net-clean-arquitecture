@@ -8,7 +8,6 @@ namespace UniversityManagement.WebApi.Controllers;
 
 /// <summary>
 /// Controlador para la gestión de carreras
-/// Expone endpoints RESTful para operaciones CRUD de carreras
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]

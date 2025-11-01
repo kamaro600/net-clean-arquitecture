@@ -7,7 +7,6 @@ namespace UniversityManagement.Infrastructure.Persistence.Repositories;
 
 /// <summary>
 /// Implementación del repositorio de facultades
-/// Implementa tanto la interfaz de dominio como el puerto de aplicación
 /// </summary>
 public class FacultyRepository : IFacultyRepository
 {
@@ -29,13 +28,13 @@ public class FacultyRepository : IFacultyRepository
     {
         return await _context.Faculties
             .Include(f => f.Careers)
-            .FirstOrDefaultAsync(f => f.FacultadId == id);
+            .FirstOrDefaultAsync(f => f.FacultyId == id);
     }
 
     public async Task<Faculty?> GetByNameAsync(string name)
     {
         return await _context.Faculties
-            .FirstOrDefaultAsync(f => f.Nombre == name);
+            .FirstOrDefaultAsync(f => f.Name == name);
     }
 
     public async Task<Faculty> UpdateAsync(Faculty faculty)
@@ -65,14 +64,14 @@ public class FacultyRepository : IFacultyRepository
 
         if (!string.IsNullOrEmpty(searchTerm))
         {
-            query = query.Where(f => f.Nombre.Contains(searchTerm) || 
-                                   f.Descripcion!.Contains(searchTerm));
+            query = query.Where(f => f.Name.Contains(searchTerm) || 
+                                   f.Description!.Contains(searchTerm));
         }
 
         var totalCount = await query.CountAsync();
         
         var faculties = await query
-            .OrderBy(f => f.Nombre)
+            .OrderBy(f => f.Name)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
@@ -82,12 +81,12 @@ public class FacultyRepository : IFacultyRepository
 
     public async Task<bool> ExistsByNameAsync(string name)
     {
-        return await _context.Faculties.AnyAsync(f => f.Nombre == name && f.Activo);
+        return await _context.Faculties.AnyAsync(f => f.Name == name && f.Activo);
     }
 
     public async Task<bool> ExistsAsync(int id)
     {
-        return await _context.Faculties.AnyAsync(f => f.FacultadId == id && f.Activo);
+        return await _context.Faculties.AnyAsync(f => f.FacultyId == id && f.Activo);
     }
 
     // Métodos de la interfaz de dominio
@@ -96,7 +95,7 @@ public class FacultyRepository : IFacultyRepository
         return await _context.Faculties
             .Include(f => f.Careers)
             .Where(f => f.Activo)
-            .OrderBy(f => f.Nombre)
+            .OrderBy(f => f.Name)
             .ToListAsync();
     }
 }

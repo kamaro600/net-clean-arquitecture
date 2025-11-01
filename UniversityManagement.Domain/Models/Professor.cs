@@ -4,14 +4,14 @@ namespace UniversityManagement.Domain.Models;
 
 public class Professor : BaseEntity
 {
-    public int ProfesorId { get; set; }
-    public string Nombre { get; set; } = string.Empty;
-    public string Apellido { get; set; } = string.Empty;
+    public int ProfessorId { get; set; }
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
     public string Dni { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
-    public string? Telefono { get; set; }
-    public string? Especialidad { get; set; }
-    public string? TituloAcademico { get; set; }
+    public string? Phone { get; set; }
+    public string? Specialty { get; set; }
+    public string? AcademicDegree { get; set; }
 
     // Propiedades de navegación
     public virtual ICollection<ProfessorCareer> ProfessorCareers { get; set; } = new List<ProfessorCareer>();

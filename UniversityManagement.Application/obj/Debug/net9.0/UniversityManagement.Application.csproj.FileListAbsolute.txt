@@ -13,3 +13,4 @@ D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagemen
 D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagement.Application\obj\Debug\net9.0\refint\UniversityManagement.Application.dll
 D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagement.Application\obj\Debug\net9.0\UniversityManagement.Application.pdb
 D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagement.Application\obj\Debug\net9.0\ref\UniversityManagement.Application.dll
+D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagement.Application\obj\Debug\net9.0\UniversityManagement.Application.sourcelink.json

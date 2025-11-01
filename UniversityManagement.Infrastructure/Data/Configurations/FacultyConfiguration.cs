@@ -10,25 +10,25 @@ public class FacultyConfiguration : IEntityTypeConfiguration<Faculty>
     {
         builder.ToTable("facultad");
 
-        builder.HasKey(e => e.FacultadId);
-        builder.Property(e => e.FacultadId)
+        builder.HasKey(e => e.FacultyId);
+        builder.Property(e => e.FacultyId)
             .HasColumnName("facultad_id")
             .ValueGeneratedOnAdd();
 
-        builder.Property(e => e.Nombre)
+        builder.Property(e => e.Name)
             .HasColumnName("nombre")
             .HasMaxLength(100)
             .IsRequired();
 
-        builder.Property(e => e.Descripcion)
+        builder.Property(e => e.Description)
             .HasColumnName("descripcion")
             .HasColumnType("text");
 
-        builder.Property(e => e.Ubicacion)
+        builder.Property(e => e.Location)
             .HasColumnName("ubicacion")
             .HasMaxLength(100);
 
-        builder.Property(e => e.Decano)
+        builder.Property(e => e.Dean)
             .HasColumnName("decano")
             .HasMaxLength(100);
 
@@ -42,6 +42,6 @@ public class FacultyConfiguration : IEntityTypeConfiguration<Faculty>
             .HasDefaultValue(true);
 
         // Índice único para el nombre
-        builder.HasIndex(e => e.Nombre).IsUnique();
+        builder.HasIndex(e => e.Name).IsUnique();
     }
 }

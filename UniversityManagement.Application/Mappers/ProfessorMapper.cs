@@ -15,18 +15,18 @@ public static class ProfessorMapper
     {
         return new ProfessorResponse
         {
-            Id = professor.ProfesorId,
-            Nombre = professor.Nombre,
-            Apellido = professor.Apellido,
+            Id = professor.ProfessorId,
+            FirstName = professor.FirstName,
+            LastName = professor.LastName,
             Dni = professor.Dni,
             Email = professor.Email,
-            Telefono = professor.Telefono,
-            Especialidad = professor.Especialidad,
-            TituloAcademico = professor.TituloAcademico,
-            Activo = professor.Activo,
-            FechaRegistro = professor.FechaRegistro,
-            Carreras = professor.ProfessorCareers?.Select(pc => pc.ToProfessorCareerData()).ToList() ?? new List<ProfessorCareerResponse>(),
-            TotalCarreras = professor.ProfessorCareers?.Count(pc => pc.Activo) ?? 0
+            Phone = professor.Phone,
+            Specialty = professor.Specialty,
+            AcademicDegree = professor.AcademicDegree,
+            IsActive = professor.Activo,
+            RegisterDate = professor.FechaRegistro,
+            Careers = professor.ProfessorCareers?.Select(pc => pc.ToProfessorCareerData()).ToList() ?? new List<ProfessorCareerResponse>(),
+            TotalCareers = professor.ProfessorCareers?.Count(pc => pc.IsActive) ?? 0
         };
     }
 
@@ -37,12 +37,12 @@ public static class ProfessorMapper
     {
         return new ProfessorCareerResponse
         {
-            CarreraId = professorCareer.CarreraId,
-            NombreCarrera = professorCareer.Career?.Nombre ?? string.Empty,
-            DescripcionCarrera = professorCareer.Career?.Descripcion,
-            FacultadNombre = professorCareer.Career?.Faculty?.Nombre,
-            FechaAsignacion = professorCareer.FechaAsignacion,
-            Activo = professorCareer.Activo
+            CareerId = professorCareer.CareerId,
+            CareerName = professorCareer.Career?.Name ?? string.Empty,
+            CareerDescription = professorCareer.Career?.Description,
+            FacultyName = professorCareer.Career?.Faculty?.Name,
+            AssignmentDate = professorCareer.AssignmentDate,
+            IsActive = professorCareer.IsActive
         };
     }
 

@@ -17,3 +17,4 @@ D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagemen
 D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagement.Infrastructure\obj\Debug\net9.0\UniversityManagement.Infrastructure.pdb
 D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagement.Infrastructure\obj\Debug\net9.0\UniversityManagement.Infrastructure.genruntimeconfig.cache
 D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagement.Infrastructure\obj\Debug\net9.0\ref\UniversityManagement.Infrastructure.dll
+D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagement.Infrastructure\obj\Debug\net9.0\UniversityManagement.Infrastructure.sourcelink.json

@@ -9,3 +9,4 @@ D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagemen
 D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagement.Domain\obj\Debug\net9.0\refint\UniversityManagement.Domain.dll
 D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagement.Domain\obj\Debug\net9.0\UniversityManagement.Domain.pdb
 D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagement.Domain\obj\Debug\net9.0\ref\UniversityManagement.Domain.dll
+D:\Personal\CAPACITACION\Arquitectura\net-clean-arquitecture\UniversityManagement.Domain\obj\Debug\net9.0\UniversityManagement.Domain.sourcelink.json

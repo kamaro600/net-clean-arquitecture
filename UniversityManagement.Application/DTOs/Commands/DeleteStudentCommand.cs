@@ -8,6 +8,6 @@ namespace UniversityManagement.Application.DTOs.Commands
 {
     public class DeleteStudentCommand
     {
-        public int EstudianteId { get; set; }
+        public int Id { get; set; }
     }
 }

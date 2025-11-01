@@ -42,15 +42,12 @@ public class StudentDomainService : IStudentDomainService
             return false;
 
         // Verificar si ya está inscrito en esa carrera
-        return !student.StudentCareers.Any(sc => sc.CarreraId == careerId && sc.Activo);
+        return !student.StudentCareers.Any(sc => sc.CareerId == careerId && sc.IsActive);
     }
 
     public async Task EnrollStudentInCareerAsync(int studentId, int careerId)
     {
         if (!await CanEnrollInCareerAsync(studentId, careerId))
             throw new InvalidOperationException("El estudiante no puede inscribirse en esta carrera");
-
-        // Lógica adicional de inscripción si es necesaria
-        // Por ejemplo, verificar prerrequisitos, cupos, etc.
     }
 }

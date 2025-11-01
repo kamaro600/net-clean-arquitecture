@@ -8,11 +8,11 @@ namespace UniversityManagement.Application.DTOs.Responses
 {
     public class ProfessorCareerResponse
     {
-        public int CarreraId { get; set; }
-        public string NombreCarrera { get; set; } = string.Empty;
-        public string? DescripcionCarrera { get; set; }
-        public string? FacultadNombre { get; set; }
-        public DateTime FechaAsignacion { get; set; }
-        public bool Activo { get; set; }
+        public int CareerId { get; set; }
+        public string CareerName { get; set; } = string.Empty;
+        public string? CareerDescription { get; set; }
+        public string? FacultyName { get; set; }
+        public DateTime AssignmentDate { get; set; }
+        public bool IsActive { get; set; }
     }
 }

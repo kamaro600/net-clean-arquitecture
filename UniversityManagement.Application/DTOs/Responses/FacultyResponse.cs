@@ -6,18 +6,18 @@ namespace UniversityManagement.Application.DTOs.Responses;
 public class FacultyResponse
 {
     public int Id { get; set; }
-    public string Nombre { get; set; } = string.Empty;
-    public string? Descripcion { get; set; }
-    public string? Ubicacion { get; set; }
-    public string? Decano { get; set; }
-    public bool Activo { get; set; }
-    public DateTime FechaRegistro { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string? Description { get; set; }
+    public string? Location { get; set; }
+    public string? Dean { get; set; }
+    public bool IsActive { get; set; }
+    public DateTime RegistrationDate { get; set; }
 
     // Información de las carreras
-    public List<FacultyCareerResponse> Carreras { get; set; } = new();
+    public List<FacultyCareerResponse> Careers { get; set; } = new();
 
     // Estadísticas
-    public int TotalCarreras { get; set; }
-    public int TotalEstudiantes { get; set; }
-    public int TotalProfesores { get; set; }
+    public int TotalCareers { get; set; }
+    public int TotalStudents { get; set; }
+    public int TotalProfessors { get; set; }
 }

@@ -10,17 +10,17 @@ public class ProfessorConfiguration : IEntityTypeConfiguration<Professor>
     {
         builder.ToTable("profesor");
 
-        builder.HasKey(e => e.ProfesorId);
-        builder.Property(e => e.ProfesorId)
+        builder.HasKey(e => e.ProfessorId);
+        builder.Property(e => e.ProfessorId)
             .HasColumnName("profesor_id")
             .ValueGeneratedOnAdd();
 
-        builder.Property(e => e.Nombre)
+        builder.Property(e => e.FirstName)
             .HasColumnName("nombre")
             .HasMaxLength(50)
             .IsRequired();
 
-        builder.Property(e => e.Apellido)
+        builder.Property(e => e.LastName)
             .HasColumnName("apellido")
             .HasMaxLength(50)
             .IsRequired();
@@ -35,15 +35,15 @@ public class ProfessorConfiguration : IEntityTypeConfiguration<Professor>
             .HasMaxLength(100)
             .IsRequired();
 
-        builder.Property(e => e.Telefono)
+        builder.Property(e => e.Phone)
             .HasColumnName("telefono")
             .HasMaxLength(20);
 
-        builder.Property(e => e.Especialidad)
+        builder.Property(e => e.Specialty)
             .HasColumnName("especialidad")
             .HasMaxLength(100);
 
-        builder.Property(e => e.TituloAcademico)
+        builder.Property(e => e.AcademicDegree)
             .HasColumnName("titulo_academico")
             .HasMaxLength(100);
 

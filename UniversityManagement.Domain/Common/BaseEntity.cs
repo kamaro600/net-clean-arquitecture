@@ -1,7 +1,6 @@
 namespace UniversityManagement.Domain.Common;
 
 /// <summary>
-/// Clase base para todas las entidades del dominio
 /// Contiene propiedades comunes como auditoría
 /// </summary>
 public abstract class BaseEntity

@@ -8,14 +8,14 @@ namespace UniversityManagement.Application.DTOs.Commands
 {
     public class UpdateStudentCommand
     {
-        public int EstudianteId { get; set; }
-        public string Nombre { get; set; } = string.Empty;
-        public string Apellido { get; set; } = string.Empty;
+        public int Id { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
         public string Dni { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-        public string? Telefono { get; set; }
-        public DateTime FechaNacimiento { get; set; }
-        public string? Direccion { get; set; }
-        public bool Activo { get; set; } = true;
+        public string? Phone { get; set; }
+        public DateTime BirthDate { get; set; }
+        public string? Address { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 }

@@ -24,9 +24,6 @@ namespace UniversityManagement.Infrastructure.Adapters.Out
             {
                 _logger.LogInformation("Enviando Sms a {phone}: {Message}", phone, message);
 
-                // En un entorno real:
-                // await _twilioClient.SendMessageAsync(phone, message);
-
                 await Task.CompletedTask;
             }
             catch (Exception ex)

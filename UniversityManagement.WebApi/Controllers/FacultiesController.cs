@@ -8,7 +8,6 @@ namespace UniversityManagement.WebApi.Controllers;
 
 /// <summary>
 /// Controlador para la gestión de facultades
-/// Expone endpoints RESTful para operaciones CRUD de facultades
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]

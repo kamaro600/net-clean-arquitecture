@@ -7,7 +7,6 @@ namespace UniversityManagement.Infrastructure.Persistence.Repositories;
 
 /// <summary>
 /// Implementación del repositorio de profesores
-/// Implementa tanto la interfaz de dominio como el puerto de aplicación
 /// </summary>
 public class ProfessorRepository : IProfessorRepository
 {
@@ -28,7 +27,7 @@ public class ProfessorRepository : IProfessorRepository
     public async Task<Professor?> GetByIdAsync(int id)
     {
         return await _context.Professors
-            .FirstOrDefaultAsync(p => p.ProfesorId == id);
+            .FirstOrDefaultAsync(p => p.ProfessorId == id);
     }
 
     public async Task<Professor?> GetByDniAsync(string dni)
@@ -69,17 +68,17 @@ public class ProfessorRepository : IProfessorRepository
 
         if (!string.IsNullOrEmpty(searchTerm))
         {
-            query = query.Where(p => p.Nombre.Contains(searchTerm) || 
-                                   p.Apellido.Contains(searchTerm) ||
-                                   p.Especialidad!.Contains(searchTerm) ||
+            query = query.Where(p => p.FirstName.Contains(searchTerm) || 
+                                   p.LastName.Contains(searchTerm) ||
+                                   p.Specialty!.Contains(searchTerm) ||
                                    p.Email.Contains(searchTerm));
         }
 
         var totalCount = await query.CountAsync();
         
         var professors = await query
-            .OrderBy(p => p.Apellido)
-            .ThenBy(p => p.Nombre)
+            .OrderBy(p => p.LastName)
+            .ThenBy(p => p.FirstName)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
@@ -90,13 +89,13 @@ public class ProfessorRepository : IProfessorRepository
     public async Task<(List<Professor> Professors, int TotalCount)> GetBySpecialtyPagedAsync(string specialty, int page, int pageSize)
     {
         var query = _context.Professors
-            .Where(p => p.Especialidad == specialty && p.Activo);
+            .Where(p => p.Specialty == specialty && p.Activo);
 
         var totalCount = await query.CountAsync();
         
         var professors = await query
-            .OrderBy(p => p.Apellido)
-            .ThenBy(p => p.Nombre)
+            .OrderBy(p => p.LastName)
+            .ThenBy(p => p.FirstName)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
@@ -116,7 +115,7 @@ public class ProfessorRepository : IProfessorRepository
 
     public async Task<bool> ExistsAsync(int id)
     {
-        return await _context.Professors.AnyAsync(p => p.ProfesorId == id && p.Activo);
+        return await _context.Professors.AnyAsync(p => p.ProfessorId == id && p.Activo);
     }
 
     // Métodos de la interfaz de dominio
@@ -124,28 +123,28 @@ public class ProfessorRepository : IProfessorRepository
     {
         return await _context.Professors
             .Where(p => p.Activo)
-            .OrderBy(p => p.Apellido)
-            .ThenBy(p => p.Nombre)
+            .OrderBy(p => p.LastName)
+            .ThenBy(p => p.FirstName)
             .ToListAsync();
     }
 
     public async Task<IEnumerable<Professor>> GetBySpecialtyAsync(string specialty)
     {
         return await _context.Professors
-            .Where(p => p.Especialidad == specialty && p.Activo)
-            .OrderBy(p => p.Apellido)
-            .ThenBy(p => p.Nombre)
+            .Where(p => p.Specialty == specialty && p.Activo)
+            .OrderBy(p => p.LastName)
+            .ThenBy(p => p.FirstName)
             .ToListAsync();
     }
 
     public async Task<IEnumerable<Professor>> GetProfessorsByCareerId(int careerId)
     {
         return await _context.Professors
-            .Where(p => p.ProfessorCareers.Any(pc => pc.CarreraId == careerId && pc.Activo) && p.Activo)
+            .Where(p => p.ProfessorCareers.Any(pc => pc.CareerId == careerId && pc.IsActive) && p.Activo)
             .Include(p => p.ProfessorCareers)
             .ThenInclude(pc => pc.Career)
-            .OrderBy(p => p.Apellido)
-            .ThenBy(p => p.Nombre)
+            .OrderBy(p => p.LastName)
+            .ThenBy(p => p.FirstName)
             .ToListAsync();
     }
 }

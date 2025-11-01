@@ -7,7 +7,6 @@ namespace UniversityManagement.Infrastructure.Persistence.Repositories;
 
 /// <summary>
 /// Implementación del repositorio de estudiantes
-/// Implementa tanto la interfaz de dominio como el puerto de aplicación
 /// </summary>
 public class StudentRepository : IStudentRepository
 {
@@ -85,7 +84,7 @@ public class StudentRepository : IStudentRepository
     public async Task<IEnumerable<Student>> GetStudentsByCareerId(int careerId)
     {
         return await _context.Students
-            .Where(s => s.StudentCareers.Any(sc => sc.CarreraId == careerId && sc.Activo))
+            .Where(s => s.StudentCareers.Any(sc => sc.CareerId == careerId && sc.IsActive))
             .Include(s => s.StudentCareers)
             .ThenInclude(sc => sc.Career)
             .ToListAsync();
@@ -128,7 +127,7 @@ public class StudentRepository : IStudentRepository
     public async Task<(List<Student> Students, int TotalCount)> GetByCareerPagedAsync(int careerId, int page, int pageSize)
     {
         var query = _context.Students
-            .Where(s => s.StudentCareers.Any(sc => sc.CarreraId == careerId && sc.Activo) && s.Activo);
+            .Where(s => s.StudentCareers.Any(sc => sc.CareerId == careerId && sc.IsActive) && s.Activo);
 
         var totalCount = await query.CountAsync();
         

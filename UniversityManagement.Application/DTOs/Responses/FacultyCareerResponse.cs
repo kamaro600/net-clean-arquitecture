@@ -9,9 +9,9 @@ namespace UniversityManagement.Application.DTOs.Responses
     public class FacultyCareerResponse
     {
         public int Id { get; set; }
-        public string Nombre { get; set; } = string.Empty;
-        public string? Descripcion { get; set; }
-        public int DuracionSemestres { get; set; }
-        public bool Activo { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public int SemesterDuration { get; set; }
+        public bool IsActive { get; set; }
     }
 }

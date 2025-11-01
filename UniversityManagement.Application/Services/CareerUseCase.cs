@@ -12,7 +12,6 @@ namespace UniversityManagement.Application.Services;
 
 /// <summary>
 /// Caso de uso para gestión de carreras
-/// Orquesta las operaciones de negocio relacionadas con carreras
 /// </summary>
 public class CareerUseCase : ICareerUseCase
 {
@@ -42,9 +41,9 @@ public class CareerUseCase : ICareerUseCase
         // Crear la carrera
         var career = new Career
         {
-            Nombre = command.Name,
-            Descripcion = command.Description,
-            FacultadId = command.FacultyId,
+            Name = command.Name,
+            Description = command.Description,
+            FacultyId = command.FacultyId,
             Activo = true,
             FechaRegistro = DateTime.UtcNow
         };
@@ -68,7 +67,7 @@ public class CareerUseCase : ICareerUseCase
         }
 
         // Validar nombre único si se está actualizando
-        if (!string.IsNullOrEmpty(command.Name) && command.Name != existingCareer.Nombre)
+        if (!string.IsNullOrEmpty(command.Name) && command.Name != existingCareer.Name)
         {
             if (await _careerRepository.ExistsByNameAsync(command.Name))
             {
@@ -77,9 +76,9 @@ public class CareerUseCase : ICareerUseCase
         }
 
         // Actualizar campos
-        existingCareer.Nombre = command.Name ?? existingCareer.Nombre;
-        existingCareer.Descripcion = command.Description ?? existingCareer.Descripcion;
-        existingCareer.FacultadId = command.FacultyId ?? existingCareer.FacultadId;
+        existingCareer.Name = command.Name ?? existingCareer.Name;
+        existingCareer.Description = command.Description ?? existingCareer.Description;
+        existingCareer.FacultyId = command.FacultyId ?? existingCareer.FacultyId;
         if (command.IsActive.HasValue)
             existingCareer.Activo = command.IsActive.Value;
 
@@ -106,7 +105,7 @@ public class CareerUseCase : ICareerUseCase
         var result = await _careerRepository.GetAllAsync();
 
         result = result
-            .Where(c => c.Nombre.Contains(query.SearchTerm, StringComparison.OrdinalIgnoreCase))
+            .Where(c => c.Name.Contains(query.SearchTerm, StringComparison.OrdinalIgnoreCase))
             .ToList();
 
         return result.ToCareerDataList();

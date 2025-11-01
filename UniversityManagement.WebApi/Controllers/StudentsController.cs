@@ -79,7 +79,7 @@ public class StudentsController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        command.EstudianteId = id;
+        command.Id = id;
         var response = await _studentUseCase.UpdateStudentAsync(command);
         
         return Ok(response);
@@ -97,7 +97,7 @@ public class StudentsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<DeletionResponse>> DeleteStudent(int id)
     {
-        var command = new DeleteStudentCommand { EstudianteId = id };
+        var command = new DeleteStudentCommand { Id = id };
         var response = await _studentUseCase.DeleteStudentAsync(command);
         
         return Ok(response);
