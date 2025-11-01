@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using UniversityManagement.Domain.Models;
 using UniversityManagement.Domain.Models.ValueObjects;
 using UniversityManagement.Infrastructure.Data.Configurations;
+using UniversityManagement.Infrastructure.Data.Models;
 
 namespace UniversityManagement.Infrastructure.Data;
 
@@ -11,30 +12,32 @@ public class UniversityDbContext : DbContext
     {
     }
 
-    public DbSet<Student> Students { get; set; }
-    public DbSet<Professor> Professors { get; set; }
-    public DbSet<Faculty> Faculties { get; set; }
-    public DbSet<Career> Careers { get; set; }
-    public DbSet<StudentCareer> StudentCareers { get; set; }
-    public DbSet<ProfessorCareer> ProfessorCareers { get; set; }
+    // DbSets para modelos de datos (EF Core) - nueva arquitectura Domain/Data separada
+    public DbSet<StudentDataModel> StudentsData { get; set; }
+    public DbSet<ProfessorDataModel> ProfessorsData { get; set; }
+    public DbSet<FacultyDataModel> FacultiesData { get; set; }
+    public DbSet<CareerDataModel> CareersData { get; set; }
+    public DbSet<StudentCareerDataModel> StudentCareersData { get; set; }
+    public DbSet<ProfessorCareerDataModel> ProfessorCareersData { get; set; }
+    
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-        // Ignorar todos los Value Objects para que EF Core no los mapee
-        modelBuilder.Ignore<FullName>();
-        modelBuilder.Ignore<Dni>();
-        modelBuilder.Ignore<Email>();
-        modelBuilder.Ignore<Phone>();
-        modelBuilder.Ignore<Address>();
-
-        // Aplicar configuraciones
-        modelBuilder.ApplyConfiguration(new StudentConfiguration());
-        modelBuilder.ApplyConfiguration(new ProfessorConfiguration());
-        modelBuilder.ApplyConfiguration(new FacultyConfiguration());
-        modelBuilder.ApplyConfiguration(new CareerConfiguration());
-        modelBuilder.ApplyConfiguration(new StudentCareerConfiguration());
-        modelBuilder.ApplyConfiguration(new ProfessorCareerConfiguration());
+     
+        // Configurar DataModels para persistencia
+        ConfigureDataModels(modelBuilder);       
     }
+
+    private void ConfigureDataModels(ModelBuilder modelBuilder)
+    {
+        // Aplicar configuraciones para los DataModels
+        modelBuilder.ApplyConfiguration(new StudentDataConfiguration());
+        modelBuilder.ApplyConfiguration(new ProfessorDataConfiguration());
+        modelBuilder.ApplyConfiguration(new FacultyDataConfiguration());
+        modelBuilder.ApplyConfiguration(new CareerDataConfiguration());
+        modelBuilder.ApplyConfiguration(new StudentCareerDataConfiguration());
+        modelBuilder.ApplyConfiguration(new ProfessorCareerDataConfiguration());
+    }
+
 }

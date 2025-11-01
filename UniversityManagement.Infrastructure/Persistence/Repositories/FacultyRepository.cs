@@ -2,11 +2,12 @@ using Microsoft.EntityFrameworkCore;
 using UniversityManagement.Domain.Models;
 using UniversityManagement.Domain.Repositories;
 using UniversityManagement.Infrastructure.Data;
+using UniversityManagement.Infrastructure.Mappers;
 
 namespace UniversityManagement.Infrastructure.Persistence.Repositories;
 
 /// <summary>
-/// Implementación del repositorio de facultades
+/// Implementación del repositorio de facultades usando arquitectura Domain/Data separation
 /// </summary>
 public class FacultyRepository : IFacultyRepository
 {
@@ -17,85 +18,108 @@ public class FacultyRepository : IFacultyRepository
         _context = context;
     }
 
-    public async Task<Faculty> CreateAsync(Faculty faculty)
+    public async Task<IEnumerable<Faculty>> GetAllAsync()
     {
-        _context.Faculties.Add(faculty);
-        await _context.SaveChangesAsync();
-        return faculty;
+        var dataModels = await _context.FacultiesData
+            .Where(f => f.Activo)
+            .OrderBy(f => f.Name)
+            .ToListAsync();
+
+        return FacultyMapper.ToDomain(dataModels);
     }
 
     public async Task<Faculty?> GetByIdAsync(int id)
     {
-        return await _context.Faculties
-            .Include(f => f.Careers)
+        var dataModel = await _context.FacultiesData
             .FirstOrDefaultAsync(f => f.FacultyId == id);
+
+        return dataModel != null ? FacultyMapper.ToDomain(dataModel) : null;
     }
 
     public async Task<Faculty?> GetByNameAsync(string name)
     {
-        return await _context.Faculties
-            .FirstOrDefaultAsync(f => f.Name == name);
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("El nombre no puede estar vacío", nameof(name));
+
+        var dataModel = await _context.FacultiesData
+            .FirstOrDefaultAsync(f => f.Name == name && f.Activo);
+
+        return dataModel != null ? FacultyMapper.ToDomain(dataModel) : null;
+    }
+
+    public async Task<Faculty> CreateAsync(Faculty faculty)
+    {
+        if (faculty == null)
+            throw new ArgumentNullException(nameof(faculty));
+
+        var dataModel = FacultyMapper.ToDataModel(faculty);
+        _context.FacultiesData.Add(dataModel);
+        await _context.SaveChangesAsync();
+
+        return FacultyMapper.ToDomain(dataModel);
     }
 
     public async Task<Faculty> UpdateAsync(Faculty faculty)
     {
-        _context.Faculties.Update(faculty);
+        if (faculty == null)
+            throw new ArgumentNullException(nameof(faculty));
+
+        var existingDataModel = await _context.FacultiesData
+            .FirstOrDefaultAsync(f => f.FacultyId == faculty.FacultyId);
+
+        if (existingDataModel == null)
+            throw new InvalidOperationException($"Facultad con ID {faculty.FacultyId} no encontrada");
+
+        FacultyMapper.UpdateDataModelFromDomain(existingDataModel, faculty);
         await _context.SaveChangesAsync();
-        return faculty;
+
+        return FacultyMapper.ToDomain(existingDataModel);
     }
 
     public async Task<bool> DeleteAsync(int id)
     {
-        var faculty = await _context.Faculties.FindAsync(id);
-        if (faculty == null)
+        var dataModel = await _context.FacultiesData.FindAsync(id);
+        if (dataModel == null)
             return false;
 
-        faculty.Activo = false;
+        // Soft delete
+        dataModel.Activo = false;
         await _context.SaveChangesAsync();
         return true;
     }
 
+    public async Task<bool> ExistsByNameAsync(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("El nombre no puede estar vacío", nameof(name));
+
+        return await _context.FacultiesData.AnyAsync(f => f.Name == name && f.Activo);
+    }
+
     public async Task<(List<Faculty> Faculties, int TotalCount)> GetPagedAsync(int page, int pageSize, string? searchTerm = null)
     {
-        var query = _context.Faculties
-            .Include(f => f.Careers)
+        var query = _context.FacultiesData
             .Where(f => f.Activo)
             .AsQueryable();
 
         if (!string.IsNullOrEmpty(searchTerm))
         {
-            query = query.Where(f => f.Name.Contains(searchTerm) || 
-                                   f.Description!.Contains(searchTerm));
+            var searchLower = searchTerm.ToLower();
+            query = query.Where(f => 
+                f.Name.ToLower().Contains(searchLower) ||
+                (f.Description != null && f.Description.ToLower().Contains(searchLower)) ||
+                (f.Location != null && f.Location.ToLower().Contains(searchLower)));
         }
 
         var totalCount = await query.CountAsync();
         
-        var faculties = await query
+        var dataModels = await query
             .OrderBy(f => f.Name)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
 
+        var faculties = FacultyMapper.ToDomain(dataModels).ToList();
         return (faculties, totalCount);
-    }
-
-    public async Task<bool> ExistsByNameAsync(string name)
-    {
-        return await _context.Faculties.AnyAsync(f => f.Name == name && f.Activo);
-    }
-
-    public async Task<bool> ExistsAsync(int id)
-    {
-        return await _context.Faculties.AnyAsync(f => f.FacultyId == id && f.Activo);
-    }
-
-    // Métodos de la interfaz de dominio
-    public async Task<IEnumerable<Faculty>> GetAllAsync()
-    {
-        return await _context.Faculties
-            .Include(f => f.Careers)
-            .Where(f => f.Activo)
-            .OrderBy(f => f.Name)
-            .ToListAsync();
     }
 }

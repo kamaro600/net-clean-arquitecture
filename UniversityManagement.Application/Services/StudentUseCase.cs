@@ -6,6 +6,7 @@ using UniversityManagement.Application.Ports.Out;
 using UniversityManagement.Application.Mappers;
 using UniversityManagement.Domain.Exceptions;
 using UniversityManagement.Domain.Models;
+using UniversityManagement.Domain.Models.ValueObjects;
 using UniversityManagement.Domain.Repositories;
 using UniversityManagement.Domain.Services.Interfaces;
 
@@ -31,66 +32,100 @@ public class StudentUseCase : IStudentUseCase
 
     public async Task<StudentResponse> CreateStudentAsync(CreateStudentCommand command)
     {
-        // Validaciones de negocio
-        await _studentDomainService.ValidateStudentUniquenessAsync(command.Dni, command.Email);              
-
-        // Crear entidad directamente desde command
-        var student = new Student
+        // Crear Value Objects desde el command con validación automática
+        var fullName = new FullName(command.FirstName, command.LastName);
+        var dni = new Dni(command.Dni);
+        var email = new Email(command.Email);
+        
+        // Value Objects opcionales
+        Phone? phone = null;
+        if (!string.IsNullOrWhiteSpace(command.Phone))
         {
-            Nombre = command.FirstName,
-            Apellido = command.LastName,
-            Dni = command.Dni,
-            Email = command.Email,
-            Telefono = command.Phone,
-            FechaNacimiento = command.Birthdate,
-            Direccion = command.Address
-        };
+            phone = new Phone(command.Phone);
+        }
+        
+        Address? address = null;
+        if (!string.IsNullOrWhiteSpace(command.Address))
+        {
+            address = new Address(command.Address);
+        }
 
-        // Validar datos usando Value Objects
-        student.ValidateStudentData();
+        // Validaciones de negocio usando Value Objects
+        await _studentDomainService.ValidateStudentUniquenessAsync(dni.Value, email.Value);
 
-        // Persistir
-        var createdStudent = await _studentRepository.CreateAsync(student);
+        // Crear entidad de dominio
+        var studentDomain = new Student(
+            fullName: fullName,
+            dni: dni,
+            email: email,
+            birthdate: command.Birthdate,
+            phone: phone,
+            address: address
+        );
+
+        // Persistir usando el repositorio
+        var createdStudent = await _studentRepository.CreateAsync(studentDomain);
 
         // Enviar notificación
         await _notificationService.SendWelcomeAsync(
-            createdStudent.Email,
-            $"{createdStudent.Nombre} {createdStudent.Apellido}");
+            createdStudent.Email.Value,
+            createdStudent.GetFormattedFullName());
 
-        return createdStudent.ToStudentData();
-
+        return StudentMapper.ToResponse(createdStudent);
     }
 
     public async Task<StudentResponse> UpdateStudentAsync(UpdateStudentCommand command)
     {
-
         var existingStudent = await _studentRepository.GetByIdAsync(command.Id);
         if (existingStudent == null)
-            throw new StudentNotFoundException(command.Id);            
+            throw new StudentNotFoundException(command.Id);
 
+        // Crear nuevos Value Objects con validación automática
+        var fullName = new FullName(command.FirstName, command.LastName);
+        var dni = new Dni(command.Dni);
+        var email = new Email(command.Email);
+        
         // Validar que el DNI no esté en uso por otro estudiante
-        var studentWithDni = await _studentRepository.GetByDniAsync(command.Dni);
-        if (studentWithDni != null && studentWithDni.EstudianteId != command.Id)
-            throw new DuplicateStudentException("Dni", command.Dni);
+        if (dni != existingStudent.Dni)
+        {
+            var studentWithDni = await _studentRepository.GetByDniAsync(dni);
+            if (studentWithDni != null && studentWithDni.Id != command.Id)
+                throw new DuplicateStudentException("Dni", command.Dni);
+        }
 
-        // Actualizar propiedades
-        existingStudent.Nombre = command.FirstName;
-        existingStudent.Apellido = command.LastName;
-        existingStudent.Email = command.Email;
-        existingStudent.Telefono = command.Phone;
-        existingStudent.FechaNacimiento = command.BirthDate;
-        existingStudent.Direccion = command.Address;
-        existingStudent.Activo = command.IsActive;
+        // Value Objects opcionales
+        Phone? phone = null;
+        if (!string.IsNullOrWhiteSpace(command.Phone))
+        {
+            phone = new Phone(command.Phone);
+        }
+        
+        Address? address = null;
+        if (!string.IsNullOrWhiteSpace(command.Address))
+        {
+            address = new Address(command.Address);
+        }
 
-        var updatedStudent = await _studentRepository.UpdateAsync(existingStudent);
+        // Crear nueva instancia inmutable con los cambios
+        var updatedStudentDomain = new Student(
+            id: existingStudent.Id,
+            fullName: fullName,
+            dni: dni,
+            email: email,
+            birthdate: command.BirthDate,
+            phone: phone,
+            address: address,
+            registrationDate: existingStudent.RegistrationDate,
+            isActive: command.IsActive
+        );
 
-        return updatedStudent.ToStudentData();
+        var updatedStudent = await _studentRepository.UpdateAsync(updatedStudentDomain);
 
+        return StudentMapper.ToResponse(updatedStudent);
     }
 
     public async Task<DeletionResponse> DeleteStudentAsync(DeleteStudentCommand command)
     {
-
         var student = await _studentRepository.GetByIdAsync(command.Id);
         if (student == null)
             return DeletionResponse.NotFound($"No se encontró el estudiante con ID: {command.Id}");
@@ -100,37 +135,33 @@ public class StudentUseCase : IStudentUseCase
         if (result)
         {
             await _notificationService.SendStudentUpdateNotificationAsync(
-                student.Email,
-                $"{student.Nombre} {student.Apellido}",
+                student.Email.Value,
+                student.GetFormattedFullName(),
                 new List<string> { "Eliminación de cuenta" });
 
             return DeletionResponse.Success($"Estudiante con ID {command.Id} eliminado exitosamente");
         }
 
         return DeletionResponse.Failure("Error al eliminar estudiante");
-
     }
 
     public async Task<StudentResponse> GetStudentByIdAsync(GetStudentByIdQuery query)
     {
-
         var student = await _studentRepository.GetByIdAsync(query.StudentId);
         if (student == null)
-            throw new StudentNotFoundException(query.StudentId);        
+            throw new StudentNotFoundException(query.StudentId);
 
-        return student.ToStudentData();
-
+        return StudentMapper.ToResponse(student);
     }
 
     public async Task<StudentResponse> GetStudentByDniAsync(GetStudentByDniQuery query)
     {
-
-        var student = await _studentRepository.GetByDniAsync(query.Dni);
+        var dni = new Dni(query.Dni); // Validación automática del DNI
+        var student = await _studentRepository.GetByDniAsync(dni);
         if (student == null)
-            throw new StudentNotFoundException(query.Dni);        
+            throw new StudentNotFoundException(query.Dni);
 
-        return student.ToStudentData();
-
+        return StudentMapper.ToResponse(student);
     }
 
     public async Task<List<StudentResponse>> GetStudentsAsync(GetStudentsQuery query)
@@ -141,21 +172,19 @@ public class StudentUseCase : IStudentUseCase
         {
             result = result
                 .Where(s =>
-                     s.Nombre.Contains(query.SearchTerm, StringComparison.OrdinalIgnoreCase) ||
-                     s.Apellido.Contains(query.SearchTerm, StringComparison.OrdinalIgnoreCase) ||
-                     s.Dni.Contains(query.SearchTerm, StringComparison.OrdinalIgnoreCase) ||
-                     s.Email.Contains(query.SearchTerm, StringComparison.OrdinalIgnoreCase))
+                     s.FullName.FirstName.Contains(query.SearchTerm, StringComparison.OrdinalIgnoreCase) ||
+                     s.FullName.LastName.Contains(query.SearchTerm, StringComparison.OrdinalIgnoreCase) ||
+                     s.Dni.Value.Contains(query.SearchTerm, StringComparison.OrdinalIgnoreCase) ||
+                     s.Email.Value.Contains(query.SearchTerm, StringComparison.OrdinalIgnoreCase))
                 .ToList();
         }
 
-        return result.ToStudentDataList();
+        return result.Select(StudentMapper.ToResponse).ToList();
     }
 
     public async Task<List<StudentResponse>> GetStudentsByCareerAsync(GetStudentsByCareerQuery query)
     {
         var result = await _studentRepository.GetStudentsByCareerId(query.CareerId);
-
-        return result.ToStudentDataList();
-
+        return result.Select(StudentMapper.ToResponse).ToList();
     }
 }

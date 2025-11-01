@@ -1,26 +1,29 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using UniversityManagement.Domain.Models;
+using UniversityManagement.Infrastructure.Data.Models;
 
 namespace UniversityManagement.Infrastructure.Data.Configurations;
 
-public class StudentConfiguration : IEntityTypeConfiguration<Student>
+/// <summary>
+/// Configuración de EF Core para ProfessorDataModel
+/// </summary>
+public class ProfessorDataConfiguration : IEntityTypeConfiguration<ProfessorDataModel>
 {
-    public void Configure(EntityTypeBuilder<Student> builder)
+    public void Configure(EntityTypeBuilder<ProfessorDataModel> builder)
     {
-        builder.ToTable("estudiante");
+        builder.ToTable("profesor");
 
-        builder.HasKey(e => e.EstudianteId);
-        builder.Property(e => e.EstudianteId)
-            .HasColumnName("estudiante_id")
+        builder.HasKey(e => e.ProfessorId);
+        builder.Property(e => e.ProfessorId)
+            .HasColumnName("profesor_id")
             .ValueGeneratedOnAdd();
 
-        builder.Property(e => e.Nombre)
+        builder.Property(e => e.FirstName)
             .HasColumnName("nombre")
             .HasMaxLength(50)
             .IsRequired();
 
-        builder.Property(e => e.Apellido)
+        builder.Property(e => e.LastName)
             .HasColumnName("apellido")
             .HasMaxLength(50)
             .IsRequired();
@@ -35,18 +38,17 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
             .HasMaxLength(100)
             .IsRequired();
 
-        builder.Property(e => e.Telefono)
+        builder.Property(e => e.Phone)
             .HasColumnName("telefono")
             .HasMaxLength(20);
 
-        builder.Property(e => e.FechaNacimiento)
-            .HasColumnName("fecha_nacimiento")
-            .HasColumnType("date")
-            .IsRequired();
+        builder.Property(e => e.Specialty)
+            .HasColumnName("especialidad")
+            .HasMaxLength(100);
 
-        builder.Property(e => e.Direccion)
-            .HasColumnName("direccion")
-            .HasMaxLength(200);
+        builder.Property(e => e.AcademicDegree)
+            .HasColumnName("titulo_academico")
+            .HasMaxLength(100);
 
         builder.Property(e => e.FechaRegistro)
             .HasColumnName("fecha_registro")
@@ -57,15 +59,14 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
             .HasColumnName("activo")
             .HasDefaultValue(true);
 
-        // Ignorar Value Objects - EF Core no debe mapearlos
-        builder.Ignore(e => e.FullNameVO);
-        builder.Ignore(e => e.DniVO);
-        builder.Ignore(e => e.EmailVO);
-        builder.Ignore(e => e.PhoneVO);
-        builder.Ignore(e => e.AddressVO);
-
         // Índices únicos
         builder.HasIndex(e => e.Dni).IsUnique();
         builder.HasIndex(e => e.Email).IsUnique();
+
+        // Configuración de relaciones
+        builder.HasMany(e => e.ProfessorCareers)
+            .WithOne(pc => pc.Professor)
+            .HasForeignKey(pc => pc.ProfessorId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

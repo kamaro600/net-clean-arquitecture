@@ -8,8 +8,9 @@ namespace UniversityManagement.Application.Mappers;
 /// </summary>
 public static class FacultyMapper
 {
+
     /// <summary>
-    /// Convierte un Faculty de dominio a FacultyResponse
+    /// Convierte un FacultyDomain a FacultyResponse
     /// </summary>
     public static FacultyResponse ToFacultyData(this Faculty faculty)
     {
@@ -22,34 +23,18 @@ public static class FacultyMapper
             Dean = faculty.Dean,
             IsActive = faculty.Activo,
             RegistrationDate = faculty.FechaRegistro,
-            Careers = faculty.Careers?.Select(c => c.ToFacultyCareerData()).ToList() ?? new List<FacultyCareerResponse>(),
-            TotalCareers = faculty.Careers?.Count(c => c.Activo) ?? 0,
-            TotalStudents = faculty.Careers?.SelectMany(c => c.StudentCareers).Count(sc => sc.IsActive) ?? 0,
-            TotalProfessors = faculty.Careers?.SelectMany(c => c.ProfessorCareers).Count(pc => pc.IsActive) ?? 0
+            Careers = new List<FacultyCareerResponse>(), // Se debe obtener por separado
+            TotalCareers = 0, // Se debe calcular por separado
+            TotalStudents = 0, // Se debe calcular por separado
+            TotalProfessors = 0 // Se debe calcular por separado
         };
     }
 
     /// <summary>
-    /// Convierte un Career a FacultyCareerResponse
-    /// </summary>
-    public static FacultyCareerResponse ToFacultyCareerData(this Career career)
-    {
-        return new FacultyCareerResponse
-        {
-            Id = career.CareerId,
-            Name = career.Name,
-            Description = career.Description,
-            SemesterDuration = career.SemesterDuration,
-            IsActive = career.Activo
-        };
-    }
-
-    /// <summary>
-    /// Convierte una lista de Faculty a lista de FacultyResponse
+    /// Convierte una lista de FacultyDomain a lista de FacultyResponse
     /// </summary>
     public static List<FacultyResponse> ToFacultyDataList(this IEnumerable<Faculty> faculties)
     {
         return faculties.Select(f => f.ToFacultyData()).ToList();
     }
-  
 }

@@ -2,11 +2,12 @@ using Microsoft.EntityFrameworkCore;
 using UniversityManagement.Domain.Models;
 using UniversityManagement.Domain.Repositories;
 using UniversityManagement.Infrastructure.Data;
+using UniversityManagement.Infrastructure.Mappers;
 
 namespace UniversityManagement.Infrastructure.Persistence.Repositories;
 
 /// <summary>
-/// Implementación del repositorio de carreras
+/// Implementación del repositorio de carreras usando arquitectura Domain/Data separation
 /// </summary>
 public class CareerRepository : ICareerRepository
 {
@@ -17,111 +18,119 @@ public class CareerRepository : ICareerRepository
         _context = context;
     }
 
-    public async Task<Career> CreateAsync(Career career)
+    public async Task<IEnumerable<Career>> GetAllAsync()
     {
-        _context.Careers.Add(career);
-        await _context.SaveChangesAsync();
-        return career;
+        var dataModels = await _context.CareersData
+            .Where(c => c.Activo)
+            .OrderBy(c => c.Name)
+            .ToListAsync();
+
+        return CareerMapper.ToDomain(dataModels);
     }
 
     public async Task<Career?> GetByIdAsync(int id)
     {
-        return await _context.Careers
-            .Include(c => c.Faculty)
+        var dataModel = await _context.CareersData
             .FirstOrDefaultAsync(c => c.CareerId == id);
+
+        return dataModel != null ? CareerMapper.ToDomain(dataModel) : null;
     }
 
     public async Task<Career?> GetByNameAsync(string name)
     {
-        return await _context.Careers
-            .FirstOrDefaultAsync(c => c.Name == name);
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("El nombre no puede estar vacío", nameof(name));
+
+        var dataModel = await _context.CareersData
+            .FirstOrDefaultAsync(c => c.Name == name && c.Activo);
+
+        return dataModel != null ? CareerMapper.ToDomain(dataModel) : null;
+    }
+
+    public async Task<IEnumerable<Career>> GetByFacultyIdAsync(int facultyId)
+    {
+        var dataModels = await _context.CareersData
+            .Where(c => c.FacultyId == facultyId && c.Activo)
+            .OrderBy(c => c.Name)
+            .ToListAsync();
+
+        return CareerMapper.ToDomain(dataModels);
+    }
+
+    public async Task<Career> CreateAsync(Career career)
+    {
+        if (career == null)
+            throw new ArgumentNullException(nameof(career));
+
+        var dataModel = CareerMapper.ToDataModel(career);
+        _context.CareersData.Add(dataModel);
+        await _context.SaveChangesAsync();
+
+        return CareerMapper.ToDomain(dataModel);
     }
 
     public async Task<Career> UpdateAsync(Career career)
     {
-        _context.Careers.Update(career);
+        if (career == null)
+            throw new ArgumentNullException(nameof(career));
+
+        var existingDataModel = await _context.CareersData
+            .FirstOrDefaultAsync(c => c.CareerId == career.CareerId);
+
+        if (existingDataModel == null)
+            throw new InvalidOperationException($"Carrera con ID {career.CareerId} no encontrada");
+
+        CareerMapper.UpdateDataModelFromDomain(existingDataModel, career);
         await _context.SaveChangesAsync();
-        return career;
+
+        return CareerMapper.ToDomain(existingDataModel);
     }
 
     public async Task<bool> DeleteAsync(int id)
     {
-        var career = await _context.Careers.FindAsync(id);
-        if (career == null)
+        var dataModel = await _context.CareersData.FindAsync(id);
+        if (dataModel == null)
             return false;
 
-        career.Activo = false;
+        // Soft delete
+        dataModel.Activo = false;
         await _context.SaveChangesAsync();
         return true;
     }
 
+    public async Task<bool> ExistsByNameInFacultyAsync(string name, int facultyId)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("El nombre no puede estar vacío", nameof(name));
+
+        return await _context.CareersData.AnyAsync(c => 
+            c.Name == name && c.FacultyId == facultyId && c.Activo);
+    }
+
     public async Task<(List<Career> Careers, int TotalCount)> GetPagedAsync(int page, int pageSize, string? searchTerm = null)
     {
-        var query = _context.Careers
-            .Include(c => c.Faculty)
+        var query = _context.CareersData
             .Where(c => c.Activo)
             .AsQueryable();
 
         if (!string.IsNullOrEmpty(searchTerm))
         {
-            query = query.Where(c => c.Name.Contains(searchTerm) || 
-                                   c.Description!.Contains(searchTerm));
+            var searchLower = searchTerm.ToLower();
+            query = query.Where(c => 
+                c.Name.ToLower().Contains(searchLower) ||
+                (c.Description != null && c.Description.ToLower().Contains(searchLower)) ||
+                (c.AwardedTitle != null && c.AwardedTitle.ToLower().Contains(searchLower)));
         }
 
         var totalCount = await query.CountAsync();
         
-        var careers = await query
+        var dataModels = await query
             .OrderBy(c => c.Name)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
 
+        var careers = CareerMapper.ToDomain(dataModels).ToList();
         return (careers, totalCount);
-    }
-
-    public async Task<(List<Career> Careers, int TotalCount)> GetByFacultyPagedAsync(int facultyId, int page, int pageSize)
-    {
-        var query = _context.Careers
-            .Include(c => c.Faculty)
-            .Where(c => c.FacultyId == facultyId && c.Activo);
-
-        var totalCount = await query.CountAsync();
-        
-        var careers = await query
-            .OrderBy(c => c.Name)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync();
-
-        return (careers, totalCount);
-    }
-
-    public async Task<bool> ExistsByNameAsync(string name)
-    {
-        return await _context.Careers.AnyAsync(c => c.Name == name && c.Activo);
-    }
-
-    public async Task<bool> ExistsAsync(int id)
-    {
-        return await _context.Careers.AnyAsync(c => c.CareerId == id && c.Activo);
-    }
-
-    // Métodos de la interfaz de dominio
-    public async Task<IEnumerable<Career>> GetAllAsync()
-    {
-        return await _context.Careers
-            .Include(c => c.Faculty)
-            .Where(c => c.Activo)
-            .OrderBy(c => c.Name)
-            .ToListAsync();
-    }
-
-    public async Task<IEnumerable<Career>> GetByFacultyIdAsync(int facultyId)
-    {
-        return await _context.Careers
-            .Include(c => c.Faculty)
-            .Where(c => c.FacultyId == facultyId && c.Activo)
-            .OrderBy(c => c.Name)
-            .ToListAsync();
     }
 }

@@ -33,20 +33,21 @@ public class CareerUseCase : ICareerUseCase
         {
             throw new FacultyNotFoundException(command.FacultyId);
         }
+
         // Validar que no exista una carrera con el mismo nombre
-        if (await _careerRepository.ExistsByNameAsync(command.Name))
+        var existingCareers = await _careerRepository.GetAllAsync();
+        if (existingCareers.Any(c => c.Name.Equals(command.Name, StringComparison.OrdinalIgnoreCase)))
         {
             throw new DuplicateCareerException("Nombre", command.Name);
         }
+
         // Crear la carrera
-        var career = new Career
-        {
-            Name = command.Name,
-            Description = command.Description,
-            FacultyId = command.FacultyId,
-            Activo = true,
-            FechaRegistro = DateTime.UtcNow
-        };
+        var career = new Career(
+            facultyId: command.FacultyId,
+            name: command.Name,
+            semesterDuration: 8, // Valor por defecto
+            description: command.Description
+        );
 
         var createdCareer = await _careerRepository.CreateAsync(career);
         return createdCareer.ToCareerData();
@@ -57,7 +58,7 @@ public class CareerUseCase : ICareerUseCase
         var existingCareer = await _careerRepository.GetByIdAsync(command.Id);
         if (existingCareer == null)
         {
-            throw new CareerNotFoundException(command.Id);            
+            throw new CareerNotFoundException(command.Id);
         }
 
         // Validar que la facultad exista si se está actualizando
@@ -69,22 +70,38 @@ public class CareerUseCase : ICareerUseCase
         // Validar nombre único si se está actualizando
         if (!string.IsNullOrEmpty(command.Name) && command.Name != existingCareer.Name)
         {
-            if (await _careerRepository.ExistsByNameAsync(command.Name))
+            var existingCareers = await _careerRepository.GetAllAsync();
+            if (existingCareers.Any(c => c.Name.Equals(command.Name, StringComparison.OrdinalIgnoreCase)))
             {
                 throw new DuplicateCareerException("Nombre", command.Name);
             }
         }
 
-        // Actualizar campos
-        existingCareer.Name = command.Name ?? existingCareer.Name;
-        existingCareer.Description = command.Description ?? existingCareer.Description;
-        existingCareer.FacultyId = command.FacultyId ?? existingCareer.FacultyId;
-        if (command.IsActive.HasValue)
-            existingCareer.Activo = command.IsActive.Value;
+        // Actualizar campos usando los métodos específicos de la entidad Domain
+        var updatedCareer = existingCareer;
 
-        var updatedCareer = await _careerRepository.UpdateAsync(existingCareer);
-        return updatedCareer.ToCareerData();
+        if (!string.IsNullOrEmpty(command.Name) && command.Name != existingCareer.Name)
+        {
+            updatedCareer = updatedCareer.UpdateName(command.Name);
+        }
 
+        if (command.Description != existingCareer.Description)
+        {
+            updatedCareer = updatedCareer.UpdateDescription(command.Description);
+        }
+
+        if (command.FacultyId.HasValue && command.FacultyId.Value != existingCareer.FacultyId)
+        {
+            updatedCareer = updatedCareer.TransferToFaculty(command.FacultyId.Value);
+        }
+
+        if (command.IsActive.HasValue && command.IsActive.Value != existingCareer.Activo)
+        {
+            updatedCareer = command.IsActive.Value ? updatedCareer.Activate() : updatedCareer.Deactivate();
+        }
+
+        var resultCareer = await _careerRepository.UpdateAsync(updatedCareer);
+        return resultCareer.ToCareerData();
     }
 
     public async Task<CareerResponse> GetCareerByIdAsync(GetCareerByIdQuery query)
@@ -97,16 +114,15 @@ public class CareerUseCase : ICareerUseCase
 
     public async Task<List<CareerResponse>> GetCareersByNameAsync(GetCareersQuery query)
     {
-        if (string.IsNullOrWhiteSpace(query.SearchTerm))
-        {
-            throw new ArgumentException("El término de búsqueda no puede ser nulo o vacío.", nameof(query.SearchTerm));
-        }
 
         var result = await _careerRepository.GetAllAsync();
 
-        result = result
-            .Where(c => c.Name.Contains(query.SearchTerm, StringComparison.OrdinalIgnoreCase))
-            .ToList();
+        if (!string.IsNullOrWhiteSpace(query.SearchTerm))
+        {
+            result = result
+         .Where(c => c.Name.Contains(query.SearchTerm, StringComparison.OrdinalIgnoreCase))
+         .ToList();
+        }
 
         return result.ToCareerDataList();
     }

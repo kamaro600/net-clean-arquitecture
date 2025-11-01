@@ -1,12 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using UniversityManagement.Domain.Models;
+using UniversityManagement.Infrastructure.Data.Models;
 
 namespace UniversityManagement.Infrastructure.Data.Configurations;
 
-public class FacultyConfiguration : IEntityTypeConfiguration<Faculty>
+/// <summary>
+/// Configuración de EF Core para FacultyDataModel
+/// </summary>
+public class FacultyDataConfiguration : IEntityTypeConfiguration<FacultyDataModel>
 {
-    public void Configure(EntityTypeBuilder<Faculty> builder)
+    public void Configure(EntityTypeBuilder<FacultyDataModel> builder)
     {
         builder.ToTable("facultad");
 
@@ -22,11 +25,11 @@ public class FacultyConfiguration : IEntityTypeConfiguration<Faculty>
 
         builder.Property(e => e.Description)
             .HasColumnName("descripcion")
-            .HasColumnType("text");
+            .HasMaxLength(1000);
 
         builder.Property(e => e.Location)
             .HasColumnName("ubicacion")
-            .HasMaxLength(100);
+            .HasMaxLength(200);
 
         builder.Property(e => e.Dean)
             .HasColumnName("decano")
@@ -34,14 +37,20 @@ public class FacultyConfiguration : IEntityTypeConfiguration<Faculty>
 
         builder.Property(e => e.FechaRegistro)
             .HasColumnName("fecha_registro")
-            .HasColumnType("timestamp")
+            .HasColumnType("timestamp without time zone")
             .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
         builder.Property(e => e.Activo)
             .HasColumnName("activo")
             .HasDefaultValue(true);
 
-        // Índice único para el nombre
+        // Índices únicos
         builder.HasIndex(e => e.Name).IsUnique();
+
+        // Configuración de relaciones
+        builder.HasMany(e => e.Careers)
+            .WithOne(c => c.Faculty)
+            .HasForeignKey(c => c.FacultyId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

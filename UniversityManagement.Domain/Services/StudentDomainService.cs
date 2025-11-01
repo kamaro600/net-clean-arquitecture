@@ -1,4 +1,5 @@
 using UniversityManagement.Domain.Models;
+using UniversityManagement.Domain.Models.ValueObjects;
 using UniversityManagement.Domain.Exceptions;
 using UniversityManagement.Domain.Repositories;
 using UniversityManagement.Domain.Services.Interfaces;
@@ -18,14 +19,18 @@ public class StudentDomainService : IStudentDomainService
 
     public async Task ValidateStudentUniquenessAsync(string dni, string email, int? excludeStudentId = null)
     {
-        var existingStudentByDni = await _studentRepository.GetByDniAsync(dni);
-        if (existingStudentByDni != null && existingStudentByDni.EstudianteId != excludeStudentId)
+        // Crear Value Objects para validación
+        var dniVO = new Dni(dni);
+        var emailVO = new Email(email);
+
+        var existingStudentByDni = await _studentRepository.GetByDniAsync(dniVO);
+        if (existingStudentByDni != null && existingStudentByDni.Id != excludeStudentId)
         {
             throw new DuplicateStudentException("DNI", dni);
         }
 
-        var existingStudentByEmail = await _studentRepository.GetByEmailAsync(email);
-        if (existingStudentByEmail != null && existingStudentByEmail.EstudianteId != excludeStudentId)
+        var existingStudentByEmail = await _studentRepository.GetByEmailAsync(emailVO);
+        if (existingStudentByEmail != null && existingStudentByEmail.Id != excludeStudentId)
         {
             throw new DuplicateStudentException("Email", email);
         }
@@ -41,8 +46,8 @@ public class StudentDomainService : IStudentDomainService
         if (career == null)
             return false;
 
-        // Verificar si ya está inscrito en esa carrera
-        return !student.StudentCareers.Any(sc => sc.CareerId == careerId && sc.IsActive);
+        // Lógica de negocio usando entidad de dominio
+        return student.CanEnrollInCareer(DateTime.Now) && student.IsActive;
     }
 
     public async Task EnrollStudentInCareerAsync(int studentId, int careerId)

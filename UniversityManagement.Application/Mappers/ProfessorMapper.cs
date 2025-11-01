@@ -8,8 +8,9 @@ namespace UniversityManagement.Application.Mappers;
 /// </summary>
 public static class ProfessorMapper
 {
+
     /// <summary>
-    /// Convierte un Professor de dominio a ProfessorResponse
+    /// Convierte un ProfessorDomain a ProfessorResponse
     /// </summary>
     public static ProfessorResponse ToProfessorData(this Professor professor)
     {
@@ -25,33 +26,16 @@ public static class ProfessorMapper
             AcademicDegree = professor.AcademicDegree,
             IsActive = professor.Activo,
             RegisterDate = professor.FechaRegistro,
-            Careers = professor.ProfessorCareers?.Select(pc => pc.ToProfessorCareerData()).ToList() ?? new List<ProfessorCareerResponse>(),
-            TotalCareers = professor.ProfessorCareers?.Count(pc => pc.IsActive) ?? 0
+            Careers = new List<ProfessorCareerResponse>(), // Se debe obtener por separado
+            TotalCareers = 0 // Se debe calcular por separado
         };
     }
 
     /// <summary>
-    /// Convierte un ProfessorCareer a ProfessorCareerResponse
-    /// </summary>
-    public static ProfessorCareerResponse ToProfessorCareerData(this ProfessorCareer professorCareer)
-    {
-        return new ProfessorCareerResponse
-        {
-            CareerId = professorCareer.CareerId,
-            CareerName = professorCareer.Career?.Name ?? string.Empty,
-            CareerDescription = professorCareer.Career?.Description,
-            FacultyName = professorCareer.Career?.Faculty?.Name,
-            AssignmentDate = professorCareer.AssignmentDate,
-            IsActive = professorCareer.IsActive
-        };
-    }
-
-    /// <summary>
-    /// Convierte una lista de Professor a lista de ProfessorResponse
+    /// Convierte una lista de ProfessorDomain a lista de ProfessorResponse
     /// </summary>
     public static List<ProfessorResponse> ToProfessorDataList(this IEnumerable<Professor> professors)
     {
         return professors.Select(p => p.ToProfessorData()).ToList();
     }
-  
 }

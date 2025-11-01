@@ -41,7 +41,10 @@ public class ProfessorDomainService : IProfessorDomainService
         if (career == null)
             return false;
 
-        // Verificar si ya está asignado a esa carrera
-        return !professor.ProfessorCareers.Any(pc => pc.CareerId == careerId && pc.IsActive);
+        // Obtener profesores ya asignados a esta carrera para verificar si ya existe la asignación
+        var professorsInCareer = await _professorRepository.GetProfessorsByCareerId(careerId);
+        
+        // Verificar si el profesor ya está asignado a esa carrera
+        return !professorsInCareer.Any(p => p.ProfessorId == professorId);
     }
 }

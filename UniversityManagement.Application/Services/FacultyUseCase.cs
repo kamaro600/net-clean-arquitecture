@@ -24,28 +24,24 @@ public class FacultyUseCase : IFacultyUseCase
     public async Task<FacultyResponse> CreateFacultyAsync(CreateFacultyCommand command)
     {
         // Validar que no exista una facultad con el mismo nombre
-        if (await _facultyRepository.ExistsByNameAsync(command.Name))
+        var existingFaculties = await _facultyRepository.GetAllAsync();
+        if (existingFaculties.Any(f => f.Name.Equals(command.Name, StringComparison.OrdinalIgnoreCase)))
         {
             throw new DuplicateFacultyException("Nombre", command.Name);
         }
 
         // Crear la facultad
-        var faculty = new Faculty
-        {
-            Name = command.Name,
-            Description = command.Description,
-            Activo = true,
-            FechaRegistro = DateTime.UtcNow
-        };
+        var faculty = new Faculty(
+            name: command.Name,
+            description: command.Description
+        );
 
         var createdFaculty = await _facultyRepository.CreateAsync(faculty);
         return createdFaculty.ToFacultyData();
-
     }
 
     public async Task<FacultyResponse> UpdateFacultyAsync(UpdateFacultyCommand command)
     {
-
         var existingFaculty = await _facultyRepository.GetByIdAsync(command.Id);
         if (existingFaculty == null)
         {
@@ -55,21 +51,33 @@ public class FacultyUseCase : IFacultyUseCase
         // Validar nombre único si se está actualizando
         if (!string.IsNullOrEmpty(command.Name) && command.Name != existingFaculty.Name)
         {
-            if (await _facultyRepository.ExistsByNameAsync(command.Name))
+            var existingFaculties = await _facultyRepository.GetAllAsync();
+            if (existingFaculties.Any(f => f.Name.Equals(command.Name, StringComparison.OrdinalIgnoreCase)))
             {
                 throw new DuplicateFacultyException("Nombre", command.Name);                
             }
         }
 
-        // Actualizar campos
-        existingFaculty.Name = command.Name ?? existingFaculty.Name;
-        existingFaculty.Description = command.Description ?? existingFaculty.Description;
-        if (command.IsActive.HasValue)
-            existingFaculty.Activo = command.IsActive.Value;
+        // Actualizar campos usando los métodos específicos de la entidad Domain
+        var updatedFaculty = existingFaculty;
+        
+        if (!string.IsNullOrEmpty(command.Name) && command.Name != existingFaculty.Name)
+        {
+            updatedFaculty = updatedFaculty.UpdateName(command.Name);
+        }
+        
+        if (command.Description != existingFaculty.Description)
+        {
+            updatedFaculty = updatedFaculty.UpdateDescription(command.Description);
+        }
+        
+        if (command.IsActive.HasValue && command.IsActive.Value != existingFaculty.Activo)
+        {
+            updatedFaculty = command.IsActive.Value ? updatedFaculty.Activate() : updatedFaculty.Deactivate();
+        }
 
-        var updatedFaculty = await _facultyRepository.UpdateAsync(existingFaculty);
-        return updatedFaculty.ToFacultyData();
-
+        var resultFaculty = await _facultyRepository.UpdateAsync(updatedFaculty);
+        return resultFaculty.ToFacultyData();
     }
 
     public async Task<FacultyResponse> GetFacultyByIdAsync(GetFacultyByIdQuery query)

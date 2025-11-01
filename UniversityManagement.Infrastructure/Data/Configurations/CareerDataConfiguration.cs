@@ -1,12 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using UniversityManagement.Domain.Models;
+using UniversityManagement.Infrastructure.Data.Models;
 
 namespace UniversityManagement.Infrastructure.Data.Configurations;
 
-public class CareerConfiguration : IEntityTypeConfiguration<Career>
+/// <summary>
+/// Configuración de EF Core para CareerDataModel
+/// </summary>
+public class CareerDataConfiguration : IEntityTypeConfiguration<CareerDataModel>
 {
-    public void Configure(EntityTypeBuilder<Career> builder)
+    public void Configure(EntityTypeBuilder<CareerDataModel> builder)
     {
         builder.ToTable("carrera");
 
@@ -26,7 +29,7 @@ public class CareerConfiguration : IEntityTypeConfiguration<Career>
 
         builder.Property(e => e.Description)
             .HasColumnName("descripcion")
-            .HasColumnType("text");
+            .HasMaxLength(500);
 
         builder.Property(e => e.SemesterDuration)
             .HasColumnName("duracion_semestres")
@@ -34,27 +37,34 @@ public class CareerConfiguration : IEntityTypeConfiguration<Career>
 
         builder.Property(e => e.AwardedTitle)
             .HasColumnName("titulo_otorgado")
-            .HasMaxLength(100);
+            .HasMaxLength(150);
 
         builder.Property(e => e.FechaRegistro)
             .HasColumnName("fecha_registro")
-            .HasColumnType("timestamp")
+            .HasColumnType("timestamp without time zone")
             .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
         builder.Property(e => e.Activo)
             .HasColumnName("activo")
             .HasDefaultValue(true);
 
-        // Relación con Faculty
+        // Índices únicos
+        builder.HasIndex(e => new { e.Name, e.FacultyId }).IsUnique();
+
+        // Configuración de relaciones
         builder.HasOne(e => e.Faculty)
             .WithMany(f => f.Careers)
             .HasForeignKey(e => e.FacultyId)
-            .HasConstraintName("fk_facultad")
             .OnDelete(DeleteBehavior.Restrict);
 
-        // Índice único para el nombre
-        builder.HasIndex(e => e.Name)
-            .IsUnique()
-            .HasDatabaseName("uk_carrera_nombre");
+        builder.HasMany(e => e.StudentCareers)
+            .WithOne(sc => sc.Career)
+            .HasForeignKey(sc => sc.CareerId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(e => e.ProfessorCareers)
+            .WithOne(pc => pc.Career)
+            .HasForeignKey(pc => pc.CareerId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

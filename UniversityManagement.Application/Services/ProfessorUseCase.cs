@@ -29,21 +29,17 @@ public class ProfessorUseCase : IProfessorUseCase
 
     public async Task<ProfessorResponse> CreateProfessorAsync(CreateProfessorCommand command)
     {
-
         await _professorDomainService.ValidateProfessorUniquenessAsync(command.Dni,command.Email);        
 
         // Crear el profesor
-        var professor = new Professor
-        {
-            FirstName = command.FirstName,
-            LastName = command.LastName,
-            Dni = command.Dni,
-            Email = command.Email,
-            Phone = command.Phone,
-            Specialty = command.Specialty,
-            Activo = true,
-            FechaRegistro = DateTime.UtcNow
-        };
+        var professor = new Professor(
+            firstName: command.FirstName,
+            lastName: command.LastName,
+            dni: command.Dni,
+            email: command.Email,
+            phone: command.Phone,
+            specialty: command.Specialty
+        );
 
         var createdProfessor = await _professorRepository.CreateAsync(professor);
         return createdProfessor.ToProfessorData();
@@ -51,7 +47,6 @@ public class ProfessorUseCase : IProfessorUseCase
 
     public async Task<ProfessorResponse> UpdateProfessorAsync(UpdateProfessorCommand command)
     {
-
         var existingProfessor = await _professorRepository.GetByIdAsync(command.Id);
         if (existingProfessor == null)
         {
@@ -61,7 +56,8 @@ public class ProfessorUseCase : IProfessorUseCase
         // Validar DNI único si se está actualizando
         if (!string.IsNullOrEmpty(command.Dni) && command.Dni != existingProfessor.Dni)
         {
-            if (await _professorRepository.ExistsByDniAsync(command.Dni))
+            var existingProfessors = await _professorRepository.GetAllAsync();
+            if (existingProfessors.Any(p => p.Dni.Equals(command.Dni, StringComparison.OrdinalIgnoreCase)))
             {
                 throw new DuplicateProfessorException("Dni", command.Dni);
             }
@@ -70,25 +66,48 @@ public class ProfessorUseCase : IProfessorUseCase
         // Validar email único si se está actualizando
         if (!string.IsNullOrEmpty(command.Email) && command.Email != existingProfessor.Email)
         {
-            if (await _professorRepository.ExistsByEmailAsync(command.Email))
+            var existingProfessors = await _professorRepository.GetAllAsync();
+            if (existingProfessors.Any(p => p.Email.Equals(command.Email, StringComparison.OrdinalIgnoreCase)))
             {
                 throw new DuplicateProfessorException("Email", command.Email);                
             }
         }
 
-        // Actualizar campos
-        existingProfessor.FirstName = command.FirstName ?? existingProfessor.FirstName;
-        existingProfessor.LastName = command.LastName ?? existingProfessor.LastName;
-        existingProfessor.Dni = command.Dni ?? existingProfessor.Dni;
-        existingProfessor.Email = command.Email ?? existingProfessor.Email;
-        existingProfessor.Phone = command.Phone ?? existingProfessor.Phone;
-        existingProfessor.Specialty = command.Specialty ?? existingProfessor.Specialty;
-        if (command.IsActive.HasValue)
-            existingProfessor.Activo = command.IsActive.Value;
+        // Actualizar campos usando los métodos específicos de la entidad Domain
+        var updatedProfessor = existingProfessor;
+        
+        if (!string.IsNullOrEmpty(command.FirstName) && command.FirstName != existingProfessor.FirstName)
+        {
+            updatedProfessor = updatedProfessor.UpdateFirstName(command.FirstName);
+        }
+        
+        if (!string.IsNullOrEmpty(command.LastName) && command.LastName != existingProfessor.LastName)
+        {
+            updatedProfessor = updatedProfessor.UpdateLastName(command.LastName);
+        }
+        
+        if (!string.IsNullOrEmpty(command.Email) && command.Email != existingProfessor.Email)
+        {
+            updatedProfessor = updatedProfessor.UpdateEmail(command.Email);
+        }
+        
+        if (command.Phone != existingProfessor.Phone)
+        {
+            updatedProfessor = updatedProfessor.UpdatePhone(command.Phone);
+        }
+        
+        if (command.Specialty != existingProfessor.Specialty)
+        {
+            updatedProfessor = updatedProfessor.UpdateSpecialty(command.Specialty);
+        }
+        
+        if (command.IsActive.HasValue && command.IsActive.Value != existingProfessor.Activo)
+        {
+            updatedProfessor = command.IsActive.Value ? updatedProfessor.Activate() : updatedProfessor.Deactivate();
+        }
 
-        var updatedProfessor = await _professorRepository.UpdateAsync(existingProfessor);
-        return updatedProfessor.ToProfessorData();
-
+        var resultProfessor = await _professorRepository.UpdateAsync(updatedProfessor);
+        return resultProfessor.ToProfessorData();
     }
 
     public async Task<ProfessorResponse> GetProfessorByIdAsync(GetProfessorByIdQuery query)
