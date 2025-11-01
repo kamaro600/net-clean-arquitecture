@@ -7,7 +7,6 @@
         <member name="T:UniversityManagement.WebApi.Controllers.CareersController">
             <summary>
             Controlador para la gestión de carreras
-            Expone endpoints RESTful para operaciones CRUD de carreras
             </summary>
         </member>
         <member name="M:UniversityManagement.WebApi.Controllers.CareersController.GetCareerById(System.Int32)">
@@ -75,7 +74,6 @@
         <member name="T:UniversityManagement.WebApi.Controllers.FacultiesController">
             <summary>
             Controlador para la gestión de facultades
-            Expone endpoints RESTful para operaciones CRUD de facultades
             </summary>
         </member>
         <member name="M:UniversityManagement.WebApi.Controllers.FacultiesController.GetFacultyById(System.Int32)">
@@ -133,7 +131,6 @@
         <member name="T:UniversityManagement.WebApi.Controllers.ProfessorsController">
             <summary>
             Controlador para la gestión de profesores
-            Expone endpoints RESTful para operaciones CRUD de profesores
             </summary>
         </member>
         <member name="M:UniversityManagement.WebApi.Controllers.ProfessorsController.GetProfessorById(System.Int32)">

@@ -16,7 +16,7 @@ public class Student : BaseEntity
     public DateTime FechaNacimiento { get; set; }
     public string? Direccion { get; set; }
 
-    // Value Objects para lógica de dominio (no persistidos directamente)
+    // Value Objects para lógica de dominio
     public FullName? FullNameVO { get; private set; }
     public Dni? DniVO { get; private set; }
     public Email? EmailVO { get; private set; }
@@ -83,54 +83,5 @@ public class Student : BaseEntity
         
         if (!string.IsNullOrWhiteSpace(Direccion))
             AddressVO = new Address(Direccion);
-    }
-
-    // Método para actualizar información del estudiante
-    public void UpdateStudentInfo(string nombre, string apellido, string email, 
-                                 string? telefono = null, string? direccion = null)
-    {
-        var changedFields = new List<string>();
-
-        // Validar los nuevos datos
-        var newFullName = new FullName(nombre, apellido);
-        var newEmail = new Email(email);
-        
-        Phone? newPhone = !string.IsNullOrWhiteSpace(telefono) ? new Phone(telefono) : null;
-        Address? newAddress = !string.IsNullOrWhiteSpace(direccion) ? new Address(direccion) : null;
-
-        // Actualizar si cambió
-        if (Nombre != nombre || Apellido != apellido)
-        {
-            Nombre = nombre;
-            Apellido = apellido;
-            FullNameVO = newFullName;
-            changedFields.Add("Name");
-        }
-
-        if (Email != email)
-        {
-            Email = email;
-            EmailVO = newEmail;
-            changedFields.Add("Email");
-        }
-
-        if (Telefono != telefono)
-        {
-            Telefono = telefono;
-            PhoneVO = newPhone;
-            changedFields.Add("Phone");
-        }
-
-        if (Direccion != direccion)
-        {
-            Direccion = direccion;
-            AddressVO = newAddress;
-            changedFields.Add("Address");
-        }
-
-        if (changedFields.Any())
-        {
-            // Los cambios se han realizado, podríamos agregar logging aquí si fuera necesario
-        }
     }
 }

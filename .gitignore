@@ -16,6 +16,14 @@ out/
 *.nupkg
 *.snupkg
 
+# Carpetas específicas de Debug
+obj/debug/
+obj/Debug/
+bin/debug/
+bin/Debug/
+bin/debug/net9.0/
+bin/Debug/net9.0/
+
 # Paquetes NuGet
 *.nupkg
 *.snupkg

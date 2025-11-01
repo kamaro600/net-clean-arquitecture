@@ -61,7 +61,7 @@ public class CareerUseCase : ICareerUseCase
         }
 
         // Validar que la facultad exista si se está actualizando
-        if (command.FacultyId.HasValue && await _facultyRepository.GetByIdAsync(command.FacultyId.Value) is not null)
+        if (command.FacultyId.HasValue && await _facultyRepository.GetByIdAsync(command.FacultyId.Value) is null)
         {
             throw new FacultyNotFoundException(command.FacultyId.Value);
         }

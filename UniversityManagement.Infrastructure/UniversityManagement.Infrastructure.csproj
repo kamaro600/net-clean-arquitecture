@@ -16,7 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Persistence\Adapter\" />
     <Folder Include="Persistence\Entities\" />
+    <Folder Include="Persistence\Mapper\" />
   </ItemGroup>
 
   <PropertyGroup>
