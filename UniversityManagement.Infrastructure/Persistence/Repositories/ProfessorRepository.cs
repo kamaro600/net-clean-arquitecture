@@ -158,4 +158,16 @@ public class ProfessorRepository : IProfessorRepository
         var professors = ProfessorMapper.ToDomain(dataModels).ToList();
         return (professors, totalCount);
     }
+
+    public async Task<IEnumerable<Career>> GetCareersByProfessorIdAsync(int professorId)
+    {
+        var careerDataModels = await _context.ProfessorCareersData
+            .Where(pc => pc.ProfessorId == professorId && pc.IsActive)
+            .Include(pc => pc.Career)
+            .Select(pc => pc.Career)
+            .Where(c => c != null && c.Activo)
+            .ToListAsync();
+
+        return CareerMapper.ToDomain(careerDataModels!);
+    }
 }

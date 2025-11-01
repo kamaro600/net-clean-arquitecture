@@ -17,13 +17,19 @@ public class CareerUseCase : ICareerUseCase
 {
     private readonly ICareerRepository _careerRepository;
     private readonly IFacultyRepository _facultyRepository;
+    private readonly IStudentRepository _studentRepository;
+    private readonly IProfessorRepository _professorRepository;
 
     public CareerUseCase(
         ICareerRepository careerRepository,
-        IFacultyRepository facultyRepository)
+        IFacultyRepository facultyRepository,
+        IStudentRepository studentRepository,
+        IProfessorRepository professorRepository)
     {
         _careerRepository = careerRepository;
         _facultyRepository = facultyRepository;
+        _studentRepository = studentRepository;
+        _professorRepository = professorRepository;
     }
 
     public async Task<CareerResponse> CreateCareerAsync(CreateCareerCommand command)
@@ -107,9 +113,17 @@ public class CareerUseCase : ICareerUseCase
     public async Task<CareerResponse> GetCareerByIdAsync(GetCareerByIdQuery query)
     {
         var career = await _careerRepository.GetByIdAsync(query.Id);
-        return career == null
-            ? throw new CareerNotFoundException(query.Id)
-            : career.ToCareerData();
+        if (career == null)
+        {
+            throw new CareerNotFoundException(query.Id);
+        }
+
+        // Cargar datos relacionados
+        var faculty = await _facultyRepository.GetByIdAsync(career.FacultyId);
+        var students = await _studentRepository.GetStudentsByCareerId(career.CareerId);
+        var professors = await _professorRepository.GetProfessorsByCareerId(career.CareerId);
+
+        return career.ToCareerData(faculty, students, professors);
     }
 
     public async Task<List<CareerResponse>> GetCareersByNameAsync(GetCareersQuery query)

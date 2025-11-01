@@ -58,6 +58,11 @@ public interface IProfessorRepository
     Task<IEnumerable<Professor>> GetProfessorsByCareerId(int careerId);
     
     /// <summary>
+    /// Obtiene las carreras asignadas a un profesor
+    /// </summary>
+    Task<IEnumerable<Career>> GetCareersByProfessorIdAsync(int professorId);
+    
+    /// <summary>
     /// Obtiene profesores con paginación y búsqueda
     /// </summary>
     Task<(List<Professor> Professors, int TotalCount)> GetPagedAsync(int page, int pageSize, string? searchTerm = null);

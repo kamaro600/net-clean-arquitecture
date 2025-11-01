@@ -151,7 +151,10 @@ public class StudentUseCase : IStudentUseCase
         if (student == null)
             throw new StudentNotFoundException(query.StudentId);
 
-        return StudentMapper.ToResponse(student);
+        // Cargar las carreras relacionadas con el estudiante
+        var careers = await _studentRepository.GetCareersByStudentIdAsync(query.StudentId);
+
+        return StudentMapper.ToResponse(student, careers);
     }
 
     public async Task<StudentResponse> GetStudentByDniAsync(GetStudentByDniQuery query)

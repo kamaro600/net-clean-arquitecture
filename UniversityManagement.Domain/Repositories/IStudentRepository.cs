@@ -62,4 +62,9 @@ public interface IStudentRepository
     /// Obtiene estudiantes por carrera
     /// </summary>
     Task<IEnumerable<Student>> GetStudentsByCareerId(int careerId);
+    
+    /// <summary>
+    /// Obtiene las carreras asignadas a un estudiante
+    /// </summary>
+    Task<IEnumerable<Career>> GetCareersByStudentIdAsync(int studentId);
 }

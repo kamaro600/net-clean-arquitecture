@@ -15,10 +15,12 @@ namespace UniversityManagement.Application.Services;
 public class FacultyUseCase : IFacultyUseCase
 {
     private readonly IFacultyRepository _facultyRepository;
+    private readonly ICareerRepository _careerRepository;
 
-    public FacultyUseCase(IFacultyRepository facultyRepository)
+    public FacultyUseCase(IFacultyRepository facultyRepository, ICareerRepository careerRepository)
     {
         _facultyRepository = facultyRepository;
+        _careerRepository = careerRepository;
     }
 
     public async Task<FacultyResponse> CreateFacultyAsync(CreateFacultyCommand command)
@@ -82,12 +84,16 @@ public class FacultyUseCase : IFacultyUseCase
 
     public async Task<FacultyResponse> GetFacultyByIdAsync(GetFacultyByIdQuery query)
     {
-
         var faculty = await _facultyRepository.GetByIdAsync(query.Id);
-        return faculty == null
-            ? throw new FacultyNotFoundException(query.Id)
-            : faculty.ToFacultyData();
+        if (faculty == null)
+        {
+            throw new FacultyNotFoundException(query.Id);
+        }
 
+        // Cargar las carreras relacionadas con la facultad
+        var careers = await _careerRepository.GetByFacultyIdAsync(query.Id);
+
+        return faculty.ToFacultyData(careers);
     }
 
     public async Task<List<FacultyResponse>> GetFacultiesByNameAsync(GetFacultiesQuery query)
@@ -101,7 +107,16 @@ public class FacultyUseCase : IFacultyUseCase
                 .ToList();
         }
 
-        return result.ToFacultyDataList();
+        // Para obtener facultades con sus carreras, cargar las carreras para cada facultad
+        var facultiesWithCareers = new List<FacultyResponse>();
+        
+        foreach (var faculty in result)
+        {
+            var careers = await _careerRepository.GetByFacultyIdAsync(faculty.FacultyId);
+            facultiesWithCareers.Add(faculty.ToFacultyData(careers));
+        }
+
+        return facultiesWithCareers;
     }
 
     public async Task<DeletionResponse> DeleteFacultyAsync(DeleteFacultyCommand command)

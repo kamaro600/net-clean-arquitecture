@@ -165,4 +165,16 @@ public class StudentRepository : IStudentRepository
 
         return StudentMapper.ToDomain(dataModels);
     }
+
+    public async Task<IEnumerable<Career>> GetCareersByStudentIdAsync(int studentId)
+    {
+        var careerDataModels = await _context.StudentCareersData
+            .Where(sc => sc.StudentId == studentId && sc.IsActive)
+            .Include(sc => sc.Career)
+            .Select(sc => sc.Career)
+            .Where(c => c != null && c.Activo)
+            .ToListAsync();
+
+        return CareerMapper.ToDomain(careerDataModels!);
+    }
 }

@@ -112,11 +112,16 @@ public class ProfessorUseCase : IProfessorUseCase
 
     public async Task<ProfessorResponse> GetProfessorByIdAsync(GetProfessorByIdQuery query)
     {
-
         var professor = await _professorRepository.GetByIdAsync(query.Id);
-        return professor == null
-            ? throw new ProfessorNotFoundException(query.Id)
-            : professor.ToProfessorData();
+        if (professor == null)
+        {
+            throw new ProfessorNotFoundException(query.Id);
+        }
+
+        // Cargar las carreras relacionadas con el profesor
+        var careers = await _professorRepository.GetCareersByProfessorIdAsync(query.Id);
+
+        return professor.ToProfessorData(careers);
     }
 
     public async Task<List<ProfessorResponse>> GetProfessorsAsync(GetProfessorsQuery query)

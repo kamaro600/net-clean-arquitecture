@@ -8,9 +8,8 @@ namespace UniversityManagement.Application.Mappers;
 /// </summary>
 public static class CareerMapper
 {
-
     /// <summary>
-    /// Convierte un CareerDomain a CareerResponse
+    /// Convierte un Career a CareerResponse
     /// </summary>
     public static CareerResponse ToCareerData(this Career career)
     {
@@ -32,7 +31,32 @@ public static class CareerMapper
     }
 
     /// <summary>
-    /// Convierte una lista de CareerDomain a lista de CareerResponse
+    /// Convierte un Career a CareerResponse incluyendo datos relacionados
+    /// </summary>
+    public static CareerResponse ToCareerData(this Career career, Faculty? faculty, IEnumerable<Student> students, IEnumerable<Professor> professors)
+    {
+        var studentList = students.ToList();
+        var professorList = professors.ToList();
+        
+        return new CareerResponse
+        {
+            Id = career.CareerId,
+            Name = career.Name,
+            Description = career.Description,
+            SemesterDuration = career.SemesterDuration,
+            AwardedTitle = career.AwardedTitle,
+            IsActive = career.Activo,
+            RegistrationDate = career.FechaRegistro,
+            FacultyId = career.FacultyId,
+            FacultyName = faculty?.Name,
+            FacultyDescription = faculty?.Description,
+            TotalStudents = studentList.Count(s => s.IsActive),
+            TotalProfessors = professorList.Count(p => p.Activo)
+        };
+    }
+
+    /// <summary>
+    /// Convierte una lista de Career a lista de CareerResponse
     /// </summary>
     public static List<CareerResponse> ToCareerDataList(this IEnumerable<Career> careers)
     {
