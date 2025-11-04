@@ -1,6 +1,6 @@
-# 🎓 Universidad Management System - Clean Architecture
+# 🎓 Sistema universidad - Clean Architecture
 
-> Sistema completo de gestión universitaria implementado con .NET 8, Clean Architecture y Value Objects, siguiendo los principios de Domain-Driven Design (DDD).
+> Sistema de gestión universitaria implementado con .NET 8, Clean Architecture y Value Objects.
 
 ## 🚀 Inicio Rápido
 
@@ -26,45 +26,6 @@ dotnet run --project UniversityManagement.WebApi
 - **.NET 8 SDK** o superior
 - **PostgreSQL 12+** 
 - **Visual Studio 2022** o **VS Code** (recomendado)
-
----
-
-## 🏗️ Arquitectura del Sistema
-
-### 📐 Clean Architecture
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                      🌐 WebApi (Presentation)               │
-│  Controllers • Middleware • Swagger • Dependency Injection  │
-└─────────────────────┬───────────────────────────────────────┘
-                      │ Dependencies Flow Inward
-┌─────────────────────▼───────────────────────────────────────┐
-│                   📱 Application Layer                      │
-│    Use Cases • DTOs • Ports • Commands • Queries           │
-└─────────────────────┬───────────────────────────────────────┘
-                      │
-┌─────────────────────▼───────────────────────────────────────┐
-│                    💼 Domain Layer                         │
-│  Entities • Value Objects • Domain Services • Repositories │
-└─────────────────────┬───────────────────────────────────────┘
-                      │
-┌─────────────────────▼───────────────────────────────────────┐
-│                   🔧 Infrastructure Layer                   │
-│     EF Core • Repositories • External Services • Data      │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### 🎯 Principios Implementados
-
-- ✅ **Dependency Inversion**: Las capas externas dependen de las internas
-- ✅ **Single Responsibility**: Cada clase tiene una única razón para cambiar  
-- ✅ **Open/Closed**: Abierto para extensión, cerrado para modificación
-- ✅ **CQRS Pattern**: Separación de Commands y Queries
-- ✅ **Repository Pattern**: Abstracción del acceso a datos
-- ✅ **Value Objects**: Encapsulación de valores con validaciones de dominio
-
----
 
 ## 🏢 Estructura Detallada del Proyecto
 
