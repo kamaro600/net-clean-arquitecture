@@ -2,7 +2,6 @@ namespace UniversityManagement.Domain.Models;
 
 /// <summary>
 /// Entidad de dominio para la relación many-to-many entre Student y Career
-/// Mantiene las mismas propiedades que la entidad StudentCareer original
 /// </summary>
 public class StudentCareer
 {

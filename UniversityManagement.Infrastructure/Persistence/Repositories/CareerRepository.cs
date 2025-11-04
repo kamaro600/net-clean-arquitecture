@@ -7,7 +7,7 @@ using UniversityManagement.Infrastructure.Mappers;
 namespace UniversityManagement.Infrastructure.Persistence.Repositories;
 
 /// <summary>
-/// Implementación del repositorio de carreras usando arquitectura Domain/Data separation
+/// Implementación del repositorio de carreras
 /// </summary>
 public class CareerRepository : ICareerRepository
 {

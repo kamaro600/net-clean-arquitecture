@@ -8,7 +8,7 @@ namespace UniversityManagement.Infrastructure.Data.Models
 {
 
     /// <summary>
-    /// Modelo de datos para la relación N:M Estudiante-Carrera - Propiedades exactas de StudentCareer original
+    /// Modelo de datos para la relación N:M Estudiante-Carrera
     /// </summary>
     public class StudentCareerDataModel
     {

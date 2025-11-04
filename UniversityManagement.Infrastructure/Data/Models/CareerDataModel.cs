@@ -8,7 +8,7 @@ using UniversityManagement.Infrastructure.Data.Common;
 namespace UniversityManagement.Infrastructure.Data.Models
 {
     /// <summary>
-    /// Modelo de datos para Carrera - Propiedades exactas de Career original
+    /// Modelo de datos para Carrera
     /// </summary>
     public class CareerDataModel : BaseDataModel
     {

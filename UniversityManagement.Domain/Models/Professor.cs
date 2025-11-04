@@ -2,7 +2,6 @@ namespace UniversityManagement.Domain.Models;
 
 /// <summary>
 /// Entidad de dominio pura para Profesor - Solo propiedades de dominio, sin dependencias de persistencia
-/// Mantiene las mismas propiedades que la entidad Professor original
 /// </summary>
 public class Professor
 {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace UniversityManagement.Infrastructure.Data.Models
 {
     /// <summary>
-    /// Modelo de datos para la relación N:M Profesor-Carrera - Propiedades exactas de ProfessorCareer original
+    /// Modelo de datos para la relación N:M Profesor-Carrera
     /// </summary>
     public class ProfessorCareerDataModel
     {

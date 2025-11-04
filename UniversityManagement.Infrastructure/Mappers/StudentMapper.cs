@@ -6,7 +6,6 @@ namespace UniversityManagement.Infrastructure.Mappers;
 
 /// <summary>
 /// Mapper para conversión entre StudentDomain (dominio) y StudentDataModel (persistencia)
-/// Encapsula la lógica de transformación entre las capas Domain e Infrastructure
 /// </summary>
 public static class StudentMapper
 {

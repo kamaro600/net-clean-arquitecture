@@ -9,8 +9,7 @@ using UniversityManagement.Infrastructure.Mappers;
 namespace UniversityManagement.Infrastructure.Persistence.Repositories;
 
 /// <summary>
-/// Implementación del repositorio de estudiantes usando arquitectura Domain/Data separation
-/// Utiliza mappers para convertir entre StudentDomain y StudentDataModel
+/// Implementación del repositorio de estudiantes
 /// </summary>
 public class StudentRepository : IStudentRepository
 {

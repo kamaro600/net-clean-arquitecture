@@ -4,7 +4,6 @@ namespace UniversityManagement.Domain.Models;
 
 /// <summary>
 /// Entidad de dominio pura - Solo Value Objects, sin dependencias de persistencia
-/// Representa un estudiante con toda su lógica de negocio encapsulada
 /// </summary>
 public class Student
 {

@@ -8,7 +8,7 @@ using UniversityManagement.Infrastructure.Data.Common;
 namespace UniversityManagement.Infrastructure.Data.Models
 {
     /// <summary>
-    /// Modelo de datos para Profesor - Propiedades exactas de Professor original
+    /// Modelo de datos para Profesor
     /// </summary>
     public class ProfessorDataModel : BaseDataModel
     {

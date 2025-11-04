@@ -3,8 +3,7 @@ using UniversityManagement.Infrastructure.Data.Common;
 namespace UniversityManagement.Infrastructure.Data.Models;
 
 /// <summary>
-/// Modelo de datos para EF Core - Solo propiedades primitivas para persistencia
-/// Representa la estructura de la tabla estudiante en la base de datos
+/// Modelo de datos para EF Core
 /// </summary>
 public class StudentDataModel : BaseDataModel
 {

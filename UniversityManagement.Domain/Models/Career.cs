@@ -2,7 +2,6 @@ namespace UniversityManagement.Domain.Models;
 
 /// <summary>
 /// Entidad de dominio pura para Carrera - Solo propiedades de dominio, sin dependencias de persistencia
-/// Mantiene las mismas propiedades que la entidad Career original
 /// </summary>
 public class Career
 {

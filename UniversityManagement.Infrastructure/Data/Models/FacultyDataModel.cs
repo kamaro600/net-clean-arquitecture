@@ -8,7 +8,7 @@ using UniversityManagement.Infrastructure.Data.Common;
 namespace UniversityManagement.Infrastructure.Data.Models
 {
     /// <summary>
-    /// Modelo de datos para Facultad - Propiedades exactas de Faculty original
+    /// Modelo de datos para Facultad
     /// </summary>
     public class FacultyDataModel : BaseDataModel
     {
