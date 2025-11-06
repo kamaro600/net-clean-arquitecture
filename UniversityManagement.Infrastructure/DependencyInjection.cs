@@ -9,6 +9,8 @@ using UniversityManagement.Infrastructure.Adapters.Out;
 using UniversityManagement.Infrastructure.Mappers;
 using UniversityManagement.Domain.Services;
 using UniversityManagement.Application.Ports.Out;
+using UniversityManagement.Infrastructure.Configuration;
+using UniversityManagement.Infrastructure.Services;
 
 namespace UniversityManagement.Infrastructure;
 
@@ -22,6 +24,17 @@ public static class DependencyInjection
         // Configurar Entity Framework
         services.AddDbContext<UniversityDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+
+        // Configurar RabbitMQ
+        services.Configure<RabbitMQSettings>(configuration.GetSection("RabbitMQ"));
+        
+        // Configurar SMTP
+        services.Configure<SmtpSettings>(configuration.GetSection("SmtpSettings"));
+        
+        // Registrar servicios de RabbitMQ
+        services.AddSingleton<RabbitMQConnectionService>();
+        services.AddScoped<IMessagePublisherPort, RabbitMQMessagePublisherAdapter>();
+        services.AddHostedService<RabbitMQConsumerService>();
 
         // Registrar repositorios (Implementaciones de Domain Interfaces)
         services.AddScoped<IStudentRepository, StudentRepository>();
@@ -40,9 +53,6 @@ public static class DependencyInjection
         // Registrar adapters para Application Ports
         services.AddScoped<IEmailNotificationPort, EmailNotificationAdapter>();
         services.AddScoped<ISmsNotificationPort, SmsNotificationAdapter>();
-
-        // Registrar dependencias de adapters
-        services.AddTransient<System.Net.Mail.SmtpClient>();
 
         return services;
     }

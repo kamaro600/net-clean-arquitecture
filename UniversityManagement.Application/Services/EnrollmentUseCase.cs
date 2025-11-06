@@ -1,5 +1,6 @@
 using UniversityManagement.Application.DTOs.Commands;
 using UniversityManagement.Application.DTOs.Responses;
+using UniversityManagement.Application.DTOs.Messages;
 using UniversityManagement.Application.Ports.In;
 using UniversityManagement.Application.Ports.Out;
 using UniversityManagement.Domain.Models;
@@ -17,20 +18,20 @@ public class EnrollmentUseCase : IEnrollmentUseCase
     private readonly ICareerRepository _careerRepository;
     private readonly IStudentCareerRepository _studentCareerRepository;
     private readonly IStudentDomainService _studentDomainService;
-    private readonly IEmailNotificationPort _notificationService;
+    private readonly IMessagePublisherPort _messagePublisher;
 
     public EnrollmentUseCase(
         IStudentRepository studentRepository,
         ICareerRepository careerRepository,
         IStudentCareerRepository studentCareerRepository,
         IStudentDomainService studentDomainService,
-         IEmailNotificationPort notificationService)
+        IMessagePublisherPort messagePublisher)
     {
         _studentRepository = studentRepository;
         _careerRepository = careerRepository;
         _studentCareerRepository = studentCareerRepository;
         _studentDomainService = studentDomainService;
-        _notificationService = notificationService;
+        _messagePublisher = messagePublisher;
     }
 
     public async Task<EnrollmentResponse> EnrollStudentInCareerAsync(EnrollStudentCommand command)
@@ -86,11 +87,19 @@ public class EnrollmentUseCase : IEnrollmentUseCase
             // Persistir la matrícula
             var savedEnrollment = await _studentCareerRepository.AddEnrollmentAsync(enrollment);
 
+            // Enviar notificación asíncrona a través de RabbitMQ
+            var notificationMessage = new EnrollmentNotificationMessage
+            {
+                StudentEmail = savedEnrollment.Student?.Email?.Value ?? "",
+                StudentName = savedEnrollment.Student?.FullName.FullDisplayName ?? "",
+                StudentDni = savedEnrollment.Student?.Dni.Value ?? "",
+                CareerName = savedEnrollment.Career?.Name ?? "",
+                FacultyName = "", // La carrera no tiene navegación directa a Faculty
+                EnrollmentDate = savedEnrollment.EnrollmentDate,
+                NotificationType = "Enrollment"
+            };
 
-            // Enviar notificación
-            await _notificationService.SendWelcomeAsync(
-                savedEnrollment?.Student?.Email?.Value ?? string.Empty,
-                savedEnrollment?.Student?.GetFormattedFullName() ?? string.Empty);
+            await _messagePublisher.PublishEnrollmentNotificationAsync(notificationMessage);
 
             return new EnrollmentResponse
             {
@@ -146,11 +155,19 @@ public class EnrollmentUseCase : IEnrollmentUseCase
             // Actualizar en la base de datos
             var updatedEnrollment = await _studentCareerRepository.UpdateEnrollmentAsync(enrollment);
 
-            // Enviar notificación usando el domain service
-            await _studentDomainService.NotifyUnenrollmentAsync(
-                updatedEnrollment.Student!,
-                updatedEnrollment.Career!
-            );
+            // Publicar mensaje para notificación asíncrona
+            var unenrollmentMessage = new EnrollmentNotificationMessage
+            {
+                StudentEmail = updatedEnrollment.Student?.Email.Value ?? "",
+                StudentName = updatedEnrollment.Student?.FullName.FullDisplayName ?? "",
+                StudentDni = updatedEnrollment.Student?.Dni.Value ?? "",
+                CareerName = updatedEnrollment.Career?.Name ?? "",
+                FacultyName = "", // La carrera no tiene navegación directa a Faculty
+                EnrollmentDate = updatedEnrollment.EnrollmentDate,
+                NotificationType = "Unenrollment"
+            };
+
+            await _messagePublisher.PublishUnenrollmentNotificationAsync(unenrollmentMessage);
 
             return new EnrollmentResponse
             {
