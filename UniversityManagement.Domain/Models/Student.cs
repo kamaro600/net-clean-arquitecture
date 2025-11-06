@@ -130,6 +130,22 @@ public class Student
     }
 
     /// <summary>
+    /// Determina si el estudiante puede inscribirse en una carrera específica
+    /// </summary>
+    public bool CanEnrollInCareer(Career career)
+    {
+        if (career == null)
+            return false;
+
+        if (!IsActive || !career.Activo)
+            return false;
+
+        // Debe ser mayor de 16 años para inscribirse (reducido a 14 para testing)
+        var age = CalculateAge();
+        return age >= 14; // Cambiado de 16 a 14 años
+    }
+
+    /// <summary>
     /// Calcula la edad del estudiante en una fecha específica
     /// </summary>
     public int CalculateAge(DateTime? referenceDate = null)

@@ -55,4 +55,41 @@ public class StudentDomainService : IStudentDomainService
         if (!await CanEnrollInCareerAsync(studentId, careerId))
             throw new InvalidOperationException("El estudiante no puede inscribirse en esta carrera");
     }
+
+    public async Task<StudentCareer> EnrollStudentInCareerAsync(Student student, Career career)
+    {
+        if (student == null)
+            throw new ArgumentNullException(nameof(student));
+        
+        if (career == null)
+            throw new ArgumentNullException(nameof(career));
+
+        if (!student.CanEnrollInCareer(career))
+            throw new InvalidOperationException("El estudiante no puede inscribirse en esta carrera");
+
+        var enrollment = new StudentCareer(student.Id, career.CareerId, DateTime.UtcNow, true, student, career);
+        
+        // Enviar notificación de matrícula
+        await NotifyEnrollmentAsync(student, career);
+        
+        return enrollment;
+    }
+
+    public async Task NotifyEnrollmentAsync(Student student, Career career)
+    {
+        // Aquí iría la lógica de notificación (email, SMS, etc.)
+        // Por ahora, solo log conceptual
+        await Task.Delay(10); // Simular operación async
+        
+        // En una implementación real, se usarían los ports de Application para envío de notificaciones
+        Console.WriteLine($"Estudiante {student.FullName.FirstName} {student.FullName.LastName} matriculado en {career.Name}");
+    }
+
+    public async Task NotifyUnenrollmentAsync(Student student, Career career)
+    {
+        // Aquí iría la lógica de notificación de desmatrícula
+        await Task.Delay(10); // Simular operación async
+        
+        Console.WriteLine($"Estudiante {student.FullName.FirstName} {student.FullName.LastName} desmatriculado de {career.Name}");
+    }
 }

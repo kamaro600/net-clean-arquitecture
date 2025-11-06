@@ -6,7 +6,7 @@ using UniversityManagement.Infrastructure.Data;
 using UniversityManagement.Infrastructure.Data.Models;
 using UniversityManagement.Infrastructure.Mappers;
 
-namespace UniversityManagement.Infrastructure.Persistence.Repositories;
+namespace UniversityManagement.Infrastructure.Repositories;
 
 /// <summary>
 /// Implementación del repositorio de estudiantes

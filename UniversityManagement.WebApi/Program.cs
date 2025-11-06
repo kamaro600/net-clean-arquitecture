@@ -50,6 +50,7 @@ builder.Services.AddScoped<IStudentUseCase, StudentUseCase>();
 builder.Services.AddScoped<ICareerUseCase, CareerUseCase>();
 builder.Services.AddScoped<IFacultyUseCase, FacultyUseCase>();
 builder.Services.AddScoped<IProfessorUseCase, ProfessorUseCase>();
+builder.Services.AddScoped<IEnrollmentUseCase, EnrollmentUseCase>();
 
 // Configurar CORS si es necesario
 builder.Services.AddCors(options =>

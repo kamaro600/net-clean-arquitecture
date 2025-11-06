@@ -7,8 +7,12 @@ public class StudentCareer
 {
     public int StudentId { get; }
     public int CareerId { get; }
-    public DateTime EnrollmentDate { get; }
-    public bool IsActive { get; }
+    public DateTime EnrollmentDate { get; private set; }
+    public bool IsActive { get; private set; }
+
+    // Propiedades de navegación opcionales para casos donde se necesiten los objetos relacionados
+    public Student? Student { get; private set; }
+    public Career? Career { get; private set; }
 
     /// <summary>
     /// Constructor principal para crear una inscripción estudiante-carrera
@@ -17,7 +21,9 @@ public class StudentCareer
         int studentId,
         int careerId,
         DateTime? enrollmentDate = null,
-        bool isActive = true)
+        bool isActive = true,
+        Student? student = null,
+        Career? career = null)
     {
         if (studentId <= 0)
             throw new ArgumentException("El StudentId debe ser mayor a 0", nameof(studentId));
@@ -29,6 +35,8 @@ public class StudentCareer
         CareerId = careerId;
         EnrollmentDate = enrollmentDate ?? DateTime.UtcNow;
         IsActive = isActive;
+        Student = student;
+        Career = career;
 
         // Validaciones de negocio
         ValidateBusinessRules();
@@ -40,30 +48,44 @@ public class StudentCareer
     public StudentCareer(
         int studentId,
         int careerId)
-        : this(studentId, careerId, DateTime.UtcNow, true)
+        : this(studentId, careerId, DateTime.UtcNow, true, null, null)
     {
+    }
+
+    /// <summary>
+    /// Método estático factory para crear instancias con entidades relacionadas
+    /// </summary>
+    public static StudentCareer Create(
+        int studentId,
+        int careerId,
+        DateTime enrollmentDate,
+        bool isActive,
+        Student? student = null,
+        Career? career = null)
+    {
+        return new StudentCareer(studentId, careerId, enrollmentDate, isActive, student, career);
     }
 
     /// <summary>
     /// Desactiva la inscripción (termina la relación estudiante-carrera)
     /// </summary>
-    public StudentCareer Deactivate()
+    public void Unenroll()
     {
         if (!IsActive)
             throw new InvalidOperationException("La inscripción ya está inactiva");
 
-        return new StudentCareer(StudentId, CareerId, EnrollmentDate, false);
+        IsActive = false;
     }
 
     /// <summary>
     /// Reactiva la inscripción
     /// </summary>
-    public StudentCareer Activate()
+    public void Activate()
     {
         if (IsActive)
             throw new InvalidOperationException("La inscripción ya está activa");
 
-        return new StudentCareer(StudentId, CareerId, EnrollmentDate, true);
+        IsActive = true;
     }
 
     /// <summary>

@@ -4,8 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using UniversityManagement.Domain.Repositories;
 using UniversityManagement.Domain.Services.Interfaces;
 using UniversityManagement.Infrastructure.Data;
-using UniversityManagement.Infrastructure.Persistence.Repositories;
+using UniversityManagement.Infrastructure.Repositories;
 using UniversityManagement.Infrastructure.Adapters.Out;
+using UniversityManagement.Infrastructure.Mappers;
 using UniversityManagement.Domain.Services;
 using UniversityManagement.Application.Ports.Out;
 
@@ -27,6 +28,10 @@ public static class DependencyInjection
         services.AddScoped<ICareerRepository, CareerRepository>();
         services.AddScoped<IFacultyRepository, FacultyRepository>();
         services.AddScoped<IProfessorRepository, ProfessorRepository>();
+        services.AddScoped<IStudentCareerRepository, StudentCareerRepository>();
+
+        // Registrar mappers
+        services.AddScoped<StudentCareerMapper>();
 
         // Registrar servicios de dominio
         services.AddScoped<IStudentDomainService, StudentDomainService>();
