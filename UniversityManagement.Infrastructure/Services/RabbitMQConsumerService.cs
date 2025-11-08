@@ -76,7 +76,15 @@ public class RabbitMQConsumerService : BackgroundService
             // Mantener el servicio corriendo
             while (!stoppingToken.IsCancellationRequested)
             {
-                await Task.Delay(1000, stoppingToken);
+                try
+                {
+                    await Task.Delay(1000, stoppingToken);
+                }
+                catch (OperationCanceledException)
+                {
+                    _logger.LogInformation("RabbitMQ Consumer Service shutdown requested");
+                    break;
+                }
             }
         }
         catch (Exception ex)

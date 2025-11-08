@@ -17,6 +17,36 @@ namespace UniversityManagement.Infrastructure;
 public static class DependencyInjection
 {
     /// <summary>
+    /// Registra servicios básicos de Infrastructure (sin HostedServices para debugging)
+    /// </summary>
+    public static IServiceCollection AddInfrastructureBasic(this IServiceCollection services, IConfiguration configuration)
+    {
+        // Configurar Entity Framework
+        services.AddDbContext<UniversityDbContext>(options =>
+            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+
+        // Registrar repositorios (Implementaciones de Domain Interfaces)
+        services.AddScoped<IStudentRepository, StudentRepository>();
+        services.AddScoped<ICareerRepository, CareerRepository>();
+        services.AddScoped<IFacultyRepository, FacultyRepository>();
+        services.AddScoped<IProfessorRepository, ProfessorRepository>();
+        services.AddScoped<IStudentCareerRepository, StudentCareerRepository>();
+
+        // Registrar mappers
+        services.AddScoped<StudentCareerMapper>();
+
+        // Registrar servicios de dominio
+        services.AddScoped<IStudentDomainService, StudentDomainService>();
+        services.AddScoped<IProfessorDomainService, ProfessorDomainService>();
+        
+        // Registrar adapters para Application Ports (sin notificaciones complejas)
+        services.AddScoped<IEmailNotificationPort, EmailNotificationAdapter>();
+        services.AddScoped<ISmsNotificationPort, SmsNotificationAdapter>();
+
+        return services;
+    }
+
+    /// <summary>
     /// Registra todos los servicios de Infrastructure
     /// </summary>
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
@@ -28,6 +58,9 @@ public static class DependencyInjection
         // Configurar RabbitMQ
         services.Configure<RabbitMQSettings>(configuration.GetSection("RabbitMQ"));
         
+        // Configurar Kafka
+        services.Configure<KafkaSettings>(configuration.GetSection("Kafka"));
+        
         // Configurar SMTP
         services.Configure<SmtpSettings>(configuration.GetSection("SmtpSettings"));
         
@@ -35,6 +68,12 @@ public static class DependencyInjection
         services.AddSingleton<RabbitMQConnectionService>();
         services.AddScoped<IMessagePublisherPort, RabbitMQMessagePublisherAdapter>();
         services.AddHostedService<RabbitMQConsumerService>();
+        
+        // Registrar servicios de Kafka para auditoría
+        services.AddScoped<IAuditPublisherPort, KafkaAuditPublisherAdapter>();
+        services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+        services.AddHostedService<KafkaAuditConsumerService>();
+        services.AddHostedService<KafkaTopicSetupService>(); // Configuración automática de topics
 
         // Registrar repositorios (Implementaciones de Domain Interfaces)
         services.AddScoped<IStudentRepository, StudentRepository>();

@@ -20,6 +20,9 @@ public class UniversityDbContext : DbContext
     public DbSet<StudentCareerDataModel> StudentCareersData { get; set; }
     public DbSet<ProfessorCareerDataModel> ProfessorCareersData { get; set; }
     
+    // DbSet para auditoría
+    public DbSet<AuditLog> AuditLogs { get; set; }
+    
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -38,6 +41,9 @@ public class UniversityDbContext : DbContext
         modelBuilder.ApplyConfiguration(new CareerDataConfiguration());
         modelBuilder.ApplyConfiguration(new StudentCareerDataConfiguration());
         modelBuilder.ApplyConfiguration(new ProfessorCareerDataConfiguration());
+        
+        // Configuración para auditoría
+        modelBuilder.ApplyConfiguration(new AuditLogConfiguration());
     }
 
 }

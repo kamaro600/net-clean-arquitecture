@@ -19,19 +19,22 @@ public class EnrollmentUseCase : IEnrollmentUseCase
     private readonly IStudentCareerRepository _studentCareerRepository;
     private readonly IStudentDomainService _studentDomainService;
     private readonly IMessagePublisherPort _messagePublisher;
+    private readonly IAuditPublisherPort _auditPublisher;
 
     public EnrollmentUseCase(
         IStudentRepository studentRepository,
         ICareerRepository careerRepository,
         IStudentCareerRepository studentCareerRepository,
         IStudentDomainService studentDomainService,
-        IMessagePublisherPort messagePublisher)
+        IMessagePublisherPort messagePublisher,
+        IAuditPublisherPort auditPublisher)
     {
         _studentRepository = studentRepository;
         _careerRepository = careerRepository;
         _studentCareerRepository = studentCareerRepository;
         _studentDomainService = studentDomainService;
         _messagePublisher = messagePublisher;
+        _auditPublisher = auditPublisher;
     }
 
     public async Task<EnrollmentResponse> EnrollStudentInCareerAsync(EnrollStudentCommand command)
@@ -60,14 +63,15 @@ public class EnrollmentUseCase : IEnrollmentUseCase
                 };
             }
 
-            // Verificar si ya existe matrícula activa
-            var existingEnrollment = await _studentCareerRepository.ExistsActiveEnrollmentAsync(command.StudentId, command.CareerId);
-            if (existingEnrollment)
+            // Verificar si ya existe una matrícula (activa o inactiva)
+            var existingEnrollment = await _studentCareerRepository.GetEnrollmentAsync(command.StudentId, command.CareerId);
+            
+            if (existingEnrollment != null && existingEnrollment.IsActive)
             {
                 return new EnrollmentResponse
                 {
                     Status = "Error",
-                    Message = "El estudiante ya está matriculado en esta carrera"
+                    Message = "El estudiante ya está matriculado activamente en esta carrera"
                 };
             }
 
@@ -81,11 +85,30 @@ public class EnrollmentUseCase : IEnrollmentUseCase
                 };
             }
 
-            // Crear la matrícula usando el dominio service
-            var enrollment = await _studentDomainService.EnrollStudentInCareerAsync(student, career);
+            StudentCareer savedEnrollment;
 
-            // Persistir la matrícula
-            var savedEnrollment = await _studentCareerRepository.AddEnrollmentAsync(enrollment);
+            if (existingEnrollment != null && !existingEnrollment.IsActive)
+            {
+                // Reactivar matrícula existente
+                existingEnrollment.Activate();
+                savedEnrollment = await _studentCareerRepository.UpdateEnrollmentAsync(existingEnrollment);
+            }
+            else
+            {
+                // Crear nueva matrícula
+                var enrollment = await _studentDomainService.EnrollStudentInCareerAsync(student, career);
+                savedEnrollment = await _studentCareerRepository.AddEnrollmentAsync(enrollment);
+            }
+
+            // **AUDITORÍA: Registrar evento de inscripción en Kafka**
+            var additionalData = $"Student: {savedEnrollment.Student?.FullName.FullDisplayName ?? "N/A"}, Career: {savedEnrollment.Career?.Name ?? "N/A"}, EnrollmentDate: {savedEnrollment.EnrollmentDate:yyyy-MM-dd HH:mm:ss}";
+            
+            await _auditPublisher.PublishEnrollmentAuditAsync(
+                studentId: savedEnrollment.StudentId.ToString(),
+                careerId: savedEnrollment.CareerId.ToString(),
+                action: "ENROLLED",
+                additionalData: additionalData
+            );
 
             // Enviar notificación asíncrona a través de RabbitMQ
             var notificationMessage = new EnrollmentNotificationMessage
@@ -154,6 +177,16 @@ public class EnrollmentUseCase : IEnrollmentUseCase
 
             // Actualizar en la base de datos
             var updatedEnrollment = await _studentCareerRepository.UpdateEnrollmentAsync(enrollment);
+
+            // **AUDITORÍA: Registrar evento de desmatrícula en Kafka**
+            var additionalData = $"Student: {updatedEnrollment.Student?.FullName.FullDisplayName ?? "N/A"}, Career: {updatedEnrollment.Career?.Name ?? "N/A"}, UnenrollmentDate: {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss}";
+            
+            await _auditPublisher.PublishEnrollmentAuditAsync(
+                studentId: updatedEnrollment.StudentId.ToString(),
+                careerId: updatedEnrollment.CareerId.ToString(),
+                action: "UNENROLLED",
+                additionalData: additionalData
+            );
 
             // Publicar mensaje para notificación asíncrona
             var unenrollmentMessage = new EnrollmentNotificationMessage

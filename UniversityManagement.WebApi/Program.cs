@@ -3,12 +3,19 @@ using UniversityManagement.Application.Services;
 using UniversityManagement.Application.Ports.In;
 using UniversityManagement.Infrastructure.Data;
 using UniversityManagement.Infrastructure;
+using UniversityManagement.Infrastructure.HealthChecks;
 using UniversityManagement.WebApi.Middleware;
 
 // Configurar comportamiento de DateTime para PostgreSQL
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configurar Kestrel explícitamente
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenLocalhost(5064);
+});
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -40,10 +47,16 @@ builder.Services.AddSwaggerGen(c =>
 
 // Configurar base de datos
 builder.Services.AddDbContext<UniversityDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+           .UseSnakeCaseNamingConvention()); // Usar snake_case para PostgreSQL
 
 // Registrar servicios de Infrastructure usando el extension method
 builder.Services.AddInfrastructure(builder.Configuration);
+
+// Configurar Health Checks
+builder.Services.AddHealthChecks()
+    .AddNpgSql(builder.Configuration.GetConnectionString("DefaultConnection")!)
+    .AddCheck<KafkaHealthCheck>("kafka");
 
 // Registrar casos de uso de Application
 builder.Services.AddScoped<IStudentUseCase, StudentUseCase>();
@@ -88,6 +101,9 @@ app.UseHttpsRedirection();
 app.UseCors("AllowAll");
 
 app.UseRouting();
+
+// Configurar Health Check endpoints
+app.MapHealthChecks("/health");
 
 app.MapControllers();
 

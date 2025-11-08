@@ -1,22 +1,10 @@
--- =============================================
--- Universidad Management System - Database Schema
--- Clean Architecture Implementation
--- PostgreSQL Database Creation Script
--- =============================================
-
--- Crear la base de datos
--- Ejecutar este comando antes del resto del script:
--- CREATE DATABASE "UniversityManagement";
-
--- Conectarse a la base de datos UniversityManagement
-\c UniversityManagement;
 
 -- =============================================
 -- TABLAS PRINCIPALES
 -- =============================================
 
 -- 1. Tabla: facultad
-CREATE TABLE facultad (
+CREATE TABLE IF NOT EXISTS facultad (
     facultad_id SERIAL PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     descripcion TEXT,
@@ -28,7 +16,7 @@ CREATE TABLE facultad (
 );
 
 -- 2. Tabla: carrera
-CREATE TABLE carrera (
+CREATE TABLE IF NOT EXISTS carrera (
     carrera_id SERIAL PRIMARY KEY,
     facultad_id INTEGER NOT NULL,
     nombre VARCHAR(100) NOT NULL,
@@ -42,7 +30,7 @@ CREATE TABLE carrera (
 );
 
 -- 3. Tabla: estudiante
-CREATE TABLE estudiante (
+CREATE TABLE IF NOT EXISTS estudiante (
     estudiante_id SERIAL PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
     apellido VARCHAR(50) NOT NULL,
@@ -58,7 +46,7 @@ CREATE TABLE estudiante (
 );
 
 -- 4. Tabla: profesor
-CREATE TABLE profesor (
+CREATE TABLE IF NOT EXISTS profesor (
     profesor_id SERIAL PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
     apellido VARCHAR(50) NOT NULL,
@@ -78,7 +66,7 @@ CREATE TABLE profesor (
 -- =============================================
 
 -- 5. Tabla: estudiante_carrera
-CREATE TABLE estudiante_carrera (
+CREATE TABLE IF NOT EXISTS estudiante_carrera (
     estudiante_id INTEGER NOT NULL,
     carrera_id INTEGER NOT NULL,
     fecha_inscripcion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -89,7 +77,7 @@ CREATE TABLE estudiante_carrera (
 );
 
 -- 6. Tabla: profesor_carrera
-CREATE TABLE profesor_carrera (
+CREATE TABLE IF NOT EXISTS profesor_carrera (
     profesor_id INTEGER NOT NULL,
     carrera_id INTEGER NOT NULL,
     fecha_asignacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -156,6 +144,34 @@ INSERT INTO profesor_carrera (profesor_id, carrera_id) VALUES
 (3, 5);  -- Diego enseña Historia
 
 -- =============================================
+-- TABLA DE AUDITORÍA PARA KAFKA
+-- =============================================
+
+-- Tabla: audit_logs (Para sistema de auditoría con Kafka)
+CREATE TABLE IF NOT EXISTS audit_logs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    event_type VARCHAR(50) NOT NULL,
+    entity_name VARCHAR(100) NOT NULL,
+    entity_id VARCHAR(50) NOT NULL,
+    action VARCHAR(50) NOT NULL,
+    user_id VARCHAR(50) NOT NULL DEFAULT 'System',
+    user_name VARCHAR(100) NOT NULL DEFAULT 'System',
+    timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    old_values TEXT,
+    new_values TEXT,
+    additional_data TEXT,
+    ip_address VARCHAR(45),
+    user_agent TEXT
+);
+
+-- Índices para optimizar consultas de auditoría
+CREATE INDEX idx_audit_logs_timestamp ON audit_logs (timestamp DESC);
+CREATE INDEX idx_audit_logs_event_type ON audit_logs (event_type);
+CREATE INDEX idx_audit_logs_entity ON audit_logs (entity_name, entity_id);
+CREATE INDEX idx_audit_logs_user ON audit_logs (user_id);
+CREATE INDEX idx_audit_logs_action ON audit_logs (action);
+
+-- =============================================
 -- VERIFICACIÓN DE LA CREACIÓN
 -- =============================================
 
@@ -178,6 +194,8 @@ UNION ALL
 SELECT 'Profesores', count(*) FROM profesor
 UNION ALL
 SELECT 'Estudiante-Carrera', count(*) FROM estudiante_carrera
+UNION ALL
+SELECT 'Audit-Logs', count(*) FROM audit_logs
 UNION ALL
 SELECT 'Profesor-Carrera', count(*) FROM profesor_carrera;
 
