@@ -9,7 +9,7 @@ using UniversityManagement.Infrastructure.Configuration;
 namespace UniversityManagement.Infrastructure.Adapters.Out;
 
 /// <summary>
-/// Adaptador para publicar eventos de auditoría en Kafka
+/// Adaptador para publicar eventos de auditoría en Kafka (Productor)
 /// </summary>
 public class KafkaAuditPublisherAdapter : IAuditPublisherPort, IDisposable
 {
@@ -80,12 +80,12 @@ public class KafkaAuditPublisherAdapter : IAuditPublisherPort, IDisposable
             var result = await _producer.ProduceAsync(_kafkaSettings.AuditTopic, message);
 
             _logger.LogInformation(
-                "Published audit event to Kafka. Topic: {Topic}, Partition: {Partition}, Offset: {Offset}, Key: {Key}",
+                "Evento publicado a kafka. Topic: {Topic}, Partition: {Partition}, Offset: {Offset}, Key: {Key}",
                 result.Topic, result.Partition, result.Offset, messageKey);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to publish audit event to Kafka for {EntityName}:{EntityId}", 
+            _logger.LogError(ex, "Falla en la publicaicon del evento {EntityName}:{EntityId}", 
                 auditEvent.EntityName, auditEvent.EntityId);
             
             // Intentar enviar a dead letter topic
@@ -156,12 +156,12 @@ public class KafkaAuditPublisherAdapter : IAuditPublisherPort, IDisposable
 
             await _producer.ProduceAsync(_kafkaSettings.DeadLetterTopic, deadLetterMessage);
             
-            _logger.LogWarning("Sent failed audit event to dead letter topic for {EntityName}:{EntityId}", 
+            _logger.LogWarning("Enviar evento fallido  al dlq {EntityName}:{EntityId}", 
                 auditEvent.EntityName, auditEvent.EntityId);
         }
         catch (Exception deadLetterEx)
         {
-            _logger.LogError(deadLetterEx, "Failed to send audit event to dead letter topic for {EntityName}:{EntityId}", 
+            _logger.LogError(deadLetterEx, "falla al enviar el evento fallido de dlq {EntityName}:{EntityId}", 
                 auditEvent.EntityName, auditEvent.EntityId);
         }
     }
@@ -175,7 +175,7 @@ public class KafkaAuditPublisherAdapter : IAuditPublisherPort, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error disposing Kafka producer");
+            _logger.LogError(ex, "Error");
         }
     }
 }

@@ -70,7 +70,7 @@ public class KafkaAuditConsumerService : BackgroundService
             await Task.Delay(2000, stoppingToken);
             
             _consumer.Subscribe(_kafkaSettings.AuditTopic);
-            _logger.LogInformation("Kafka Audit Consumer started. Subscribed to topic: {Topic}", _kafkaSettings.AuditTopic);
+            _logger.LogInformation("Consumidor Kafka iniciado. Suscrito al topico: {Topic}", _kafkaSettings.AuditTopic);
 
             while (!stoppingToken.IsCancellationRequested)
             {
@@ -96,24 +96,24 @@ public class KafkaAuditConsumerService : BackgroundService
                 }
                 catch (ConsumeException ex)
                 {
-                    _logger.LogError(ex, "Error consuming message from Kafka");
-                    await Task.Delay(1000, stoppingToken); // Esperar antes de reintentar
+                    _logger.LogError(ex, "Error de consumo de kafka");
+                    await Task.Delay(1000, stoppingToken);
                 }
                 catch (OperationCanceledException)
                 {
-                    _logger.LogInformation("Kafka Audit Consumer operation was cancelled");
+                    _logger.LogInformation("Operacion cancelada");
                     break;
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Unexpected error in Kafka Audit Consumer");
-                    await Task.Delay(5000, stoppingToken); // Esperar antes de reintentar
+                    _logger.LogError(ex, "Error inesperado en kafka");
+                    await Task.Delay(5000, stoppingToken);
                 }
             }
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Fatal error in Kafka Audit Consumer");
+            _logger.LogError(ex, "Error en kafka");
         }
         finally
         {
@@ -121,11 +121,11 @@ public class KafkaAuditConsumerService : BackgroundService
             {
                 _consumer.Close();
                 _consumer.Dispose();
-                _logger.LogInformation("Kafka Audit Consumer stopped");
+                _logger.LogInformation("Consumidor kafaka detenido");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error disposing Kafka consumer");
+                _logger.LogError(ex, "Error kafka liberaicon");
             }
         }
     }
@@ -135,7 +135,7 @@ public class KafkaAuditConsumerService : BackgroundService
         try
         {
             var message = consumeResult.Message;
-            _logger.LogDebug("Processing audit event. Key: {Key}, Partition: {Partition}, Offset: {Offset}",
+            _logger.LogDebug("Procesando un evento. Key: {Key}, Partition: {Partition}, Offset: {Offset}",
                 message.Key, consumeResult.Partition, consumeResult.Offset);
 
             // Deserializar el mensaje
@@ -143,7 +143,7 @@ public class KafkaAuditConsumerService : BackgroundService
             
             if (auditEventMessage == null)
             {
-                _logger.LogWarning("Failed to deserialize audit event message. Key: {Key}", message.Key);
+                _logger.LogWarning("Falla en deserializar el mensaje. Key: {Key}", message.Key);
                 return;
             }
 
@@ -169,7 +169,7 @@ public class KafkaAuditConsumerService : BackgroundService
             await auditRepository.AddAsync(auditLog);
 
             _logger.LogInformation(
-                "Audit event processed and saved. EventType: {EventType}, Entity: {EntityName}:{EntityId}, Action: {Action}",
+                "Evento procesado. EventType: {EventType}, Entity: {EntityName}:{EntityId}, Action: {Action}",
                 auditEventMessage.EventType, auditEventMessage.EntityName, auditEventMessage.EntityId, auditEventMessage.Action);
 
             // Extraer headers para logging adicional
@@ -178,18 +178,18 @@ public class KafkaAuditConsumerService : BackgroundService
                 var correlationId = GetHeaderValue(message.Headers, "correlationId");
                 var source = GetHeaderValue(message.Headers, "source");
                 
-                _logger.LogDebug("Additional info - CorrelationId: {CorrelationId}, Source: {Source}",
+                _logger.LogDebug("Informacion adicional - CorrelationId: {CorrelationId}, Source: {Source}",
                     correlationId, source);
             }
         }
         catch (JsonException ex)
         {
-            _logger.LogError(ex, "Failed to deserialize audit event message. Key: {Key}, Value: {Value}",
+            _logger.LogError(ex, "Falla al deserializar el mensaje. Key: {Key}, Value: {Value}",
                 consumeResult.Message.Key, consumeResult.Message.Value);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error processing audit event. Key: {Key}", consumeResult.Message.Key);
+            _logger.LogError(ex, "Error al procesar el evento. Key: {Key}", consumeResult.Message.Key);
             throw; // Re-throw para que Kafka maneje el reintento
         }
     }
@@ -205,7 +205,7 @@ public class KafkaAuditConsumerService : BackgroundService
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Error reading header {Key}", key);
+            _logger.LogWarning(ex, "Error al leer cabeceras {Key}", key);
         }
         
         return string.Empty;
@@ -213,7 +213,7 @@ public class KafkaAuditConsumerService : BackgroundService
 
     public override async Task StopAsync(CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Stopping Kafka Audit Consumer...");
+        _logger.LogInformation("Deteniendo kafaka consumidor...");
         await base.StopAsync(cancellationToken);
     }
 }

@@ -35,11 +35,11 @@ public class RabbitMQMessagePublisherAdapter : IMessagePublisherPort
         {
             message.NotificationType = "Enrollment";
             await PublishMessageAsync(message, _settings.EnrollmentRoutingKey);
-            _logger.LogInformation("Published enrollment notification message for student {StudentEmail}", message.StudentEmail);
+            _logger.LogInformation("Notificacion de Matricula publicado de {StudentEmail}", message.StudentEmail);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to publish enrollment notification message for student {StudentEmail}", message.StudentEmail);
+            _logger.LogError(ex, "Falla en la publicacion de la notificacion de matricula {StudentEmail}", message.StudentEmail);
             throw;
         }
     }
@@ -50,11 +50,11 @@ public class RabbitMQMessagePublisherAdapter : IMessagePublisherPort
         {
             message.NotificationType = "Unenrollment";
             await PublishMessageAsync(message, _settings.UnenrollmentRoutingKey);
-            _logger.LogInformation("Published unenrollment notification message for student {StudentEmail}", message.StudentEmail);
+            _logger.LogInformation("Notificaicon de desmatricula publicado de {StudentEmail}", message.StudentEmail);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to publish unenrollment notification message for student {StudentEmail}", message.StudentEmail);
+            _logger.LogError(ex, "Falla en la publicacion de la notificacion de desmatricula {StudentEmail}", message.StudentEmail);
             throw;
         }
     }

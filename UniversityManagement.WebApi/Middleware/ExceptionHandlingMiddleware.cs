@@ -7,7 +7,6 @@ namespace UniversityManagement.WebApi.Middleware;
 
 /// <summary>
 /// Middleware para manejo centralizado de excepciones siguiendo Clean Architecture
-/// Maneja específicamente las excepciones del dominio
 /// </summary>
 public class ExceptionHandlingMiddleware
 {

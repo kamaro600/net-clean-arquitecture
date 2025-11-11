@@ -25,7 +25,7 @@ public class KafkaTopicSetupService : IHostedService
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Configurando topics de Kafka...");
+        _logger.LogInformation("Configurando topics de Kafka");
 
         try
         {
@@ -48,7 +48,6 @@ public class KafkaTopicSetupService : IHostedService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error al configurar topics de Kafka: {Error}", ex.Message);
-            // No lanzamos la excepción para que la aplicación pueda continuar
         }
     }
 
@@ -91,7 +90,7 @@ public class KafkaTopicSetupService : IHostedService
                 {
                     Name = _kafkaSettings.AuditTopic,
                     NumPartitions = 3, // Múltiples particiones para mayor throughput
-                    ReplicationFactor = 1, // Para desarrollo, en producción usar 3
+                    ReplicationFactor = 1, 
                     Configs = new Dictionary<string, string>
                     {
                         { "retention.ms", "604800000" }, // 7 días
@@ -172,24 +171,24 @@ public class KafkaTopicSetupService : IHostedService
             // Verificar topic principal
             if (topics.TryGetValue(_kafkaSettings.AuditTopic, out var auditTopic))
             {
-                _logger.LogInformation("✅ Topic '{Topic}' verificado - Particiones: {Partitions}", 
+                _logger.LogInformation("Topic '{Topic}' verificado - Particiones: {Partitions}", 
                     _kafkaSettings.AuditTopic, auditTopic.Partitions.Count);
             }
             else
             {
-                _logger.LogWarning("⚠️ Topic '{Topic}' no encontrado después de la creación", 
+                _logger.LogWarning(" Topic '{Topic}' no encontrado después de la creación", 
                     _kafkaSettings.AuditTopic);
             }
 
             // Verificar DLQ
             if (topics.TryGetValue(_kafkaSettings.DeadLetterTopic, out var dlqTopic))
             {
-                _logger.LogInformation("✅ Topic '{Topic}' verificado - Particiones: {Partitions}", 
+                _logger.LogInformation("Topic '{Topic}' verificado - Particiones: {Partitions}", 
                     _kafkaSettings.DeadLetterTopic, dlqTopic.Partitions.Count);
             }
             else
             {
-                _logger.LogWarning("⚠️ Topic '{Topic}' no encontrado después de la creación", 
+                _logger.LogWarning("Topic '{Topic}' no encontrado después de la creación", 
                     _kafkaSettings.DeadLetterTopic);
             }
         }

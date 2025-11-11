@@ -75,11 +75,11 @@ public class RabbitMQConnectionService : IDisposable
                 routingKey: _settings.UnenrollmentRoutingKey
             );
 
-            _logger.LogInformation("RabbitMQ connection initialized successfully");
+            _logger.LogInformation("Conexion de RabbitMQ inicializada");
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to initialize RabbitMQ connection");
+            _logger.LogError(ex, "Fallo la conexion de rabbitmq");
             throw;
         }
     }

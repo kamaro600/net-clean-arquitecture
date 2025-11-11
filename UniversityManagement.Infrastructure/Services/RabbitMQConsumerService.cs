@@ -38,7 +38,7 @@ public class RabbitMQConsumerService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("RabbitMQ Consumer Service started");
+        _logger.LogInformation("Servicio Consumidor de RabbitMQ iniciado");
 
         try
         {
@@ -71,7 +71,7 @@ public class RabbitMQConsumerService : BackgroundService
                 consumer: unenrollmentConsumer
             );
 
-            _logger.LogInformation("RabbitMQ consumers are listening for messages");
+            _logger.LogInformation("El consumidor esta escuchando");
 
             // Mantener el servicio corriendo
             while (!stoppingToken.IsCancellationRequested)
@@ -82,14 +82,14 @@ public class RabbitMQConsumerService : BackgroundService
                 }
                 catch (OperationCanceledException)
                 {
-                    _logger.LogInformation("RabbitMQ Consumer Service shutdown requested");
+                    _logger.LogInformation("El servicio de RabbitMQ fue cancelado");
                     break;
                 }
             }
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error in RabbitMQ Consumer Service");
+            _logger.LogError(ex, "Error en servicio consumidor de RabbitMQ");
         }
     }
 
@@ -107,7 +107,7 @@ public class RabbitMQConsumerService : BackgroundService
 
             if (notificationMessage != null)
             {
-                _logger.LogInformation("Processing enrollment notification for student {StudentEmail}", notificationMessage.StudentEmail);
+                _logger.LogInformation("Procesando notificacion de la matricula {StudentEmail}", notificationMessage.StudentEmail);
 
                 // Crear un scope para usar servicios scoped
                 using var scope = _serviceScopeFactory.CreateScope();
@@ -121,7 +121,7 @@ public class RabbitMQConsumerService : BackgroundService
                     notificationMessage.EnrollmentDate.ToString("dd/MM/yyyy")
                 );
 
-                _logger.LogInformation("Enrollment notification sent successfully to {StudentEmail}", notificationMessage.StudentEmail);
+                _logger.LogInformation("Notificacion de matricula enviada a {StudentEmail}", notificationMessage.StudentEmail);
             }
 
             // Confirmar que el mensaje fue procesado
@@ -129,7 +129,7 @@ public class RabbitMQConsumerService : BackgroundService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error processing enrollment message");
+            _logger.LogError(ex, "Error en lanotificacion de matricula");
             
             // Rechazar el mensaje y no requeued (evitar loops infinitos)
             _channel?.BasicNack(ea.DeliveryTag, false, false);
@@ -150,7 +150,7 @@ public class RabbitMQConsumerService : BackgroundService
 
             if (notificationMessage != null)
             {
-                _logger.LogInformation("Processing unenrollment notification for student {StudentEmail}", notificationMessage.StudentEmail);
+                _logger.LogInformation("Proceso de desmatricula notificacion a {StudentEmail}", notificationMessage.StudentEmail);
 
                 // Crear un scope para usar servicios scoped
                 using var scope = _serviceScopeFactory.CreateScope();
@@ -164,7 +164,7 @@ public class RabbitMQConsumerService : BackgroundService
                     notificationMessage.EnrollmentDate.ToString("dd/MM/yyyy")
                 );
 
-                _logger.LogInformation("Unenrollment notification sent successfully to {StudentEmail}", notificationMessage.StudentEmail);
+                _logger.LogInformation("Notificaicon de desmatricula enviada a {StudentEmail}", notificationMessage.StudentEmail);
             }
 
             // Confirmar que el mensaje fue procesado
@@ -172,7 +172,7 @@ public class RabbitMQConsumerService : BackgroundService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error processing unenrollment message");
+            _logger.LogError(ex, "Error en la notificaicon de desmatricula");
             
             // Rechazar el mensaje y no requeued
             _channel?.BasicNack(ea.DeliveryTag, false, false);
